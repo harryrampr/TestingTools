@@ -1,7 +1,7 @@
 {
   "name": "hrpdevtools/testing-tools",
   "description": "Tools for unit testing with PHPUnit.",
-  "keywods": "['Utilities', 'PhpUnit']",
+  "keywods": "['Utilities', 'PhpUnit', 'Unit Testing']",
   "homepage": "https://github.com/harryrampr/TestingTools",
   "type": "library",
   "license": "MIT",
