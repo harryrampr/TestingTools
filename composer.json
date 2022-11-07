@@ -1,0 +1,22 @@
+{
+  "name": "hrpdevtools/testing-tools",
+  "description": "Tools for unit testing with PHPUnit.",
+  "keywods": "['Utilities', 'PhpUnit']",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Harry Ramirez",
+      "email": "harryrampr@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hrpdevtools\\TestingTools\\": "src"
+    }
+  }
+}
