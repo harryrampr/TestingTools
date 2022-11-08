@@ -12,10 +12,13 @@ class Utilities
     // Keep this function private so class can't initialize
     private function __construct()
     {
+        // Keep empty, do not remove or alter.
     }
 
     /**
-     * @param string $classFullName Enter class name including namespace
+     * Test if class exist
+     *
+     * @param string $classFullName The class name including namespace.
      * @return void
      */
     public static function testClassExists(string $classFullName): void
@@ -25,7 +28,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName Enter class name including namespace
+     * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
      */
@@ -38,7 +41,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName Enter class name including namespace
+     * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
      */
@@ -51,7 +54,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName Enter class name including namespace
+     * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
      */
@@ -64,7 +67,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName Enter class name including namespace
+     * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
      */
@@ -77,20 +80,22 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName Enter class name including namespace
-     * @param string $propertyName Just enter the property name
-     * @param string $propertyAccessibility Choose from 'public', 'private' or 'protected'
-     * @param string $propertyValueType Enter property type, use 'unset' for none
-     * @param string $propertyDefaultValue Enter property default value, for no default use 'unset'
-     * @param int|null $positionInConstructor Enter property position in constructor, use null for no position
-     * @param bool $isStatic Enter true if property is static, else set to false
+     * Test class property
+     *
+     * @param string $classFullName The property's class name including namespace.
+     * @param string $propertyName The name of the property to test.
+     * @param string $propertyAccessibility The kind of property's accessibility ['public'|'private'|'protected'].
+     * @param string $propertyValueType The property's value type, use 'unset' for mixed.
+     * @param string $propertyDefaultValue The property's default value, use 'unset' for no default.
+     * @param int|null $positionInConstructor The property's position in __constructor, use null for no position.
+     * @param bool $isStatic State if the property is static, true or false.
      *
      * @return void
      * @throws ReflectionException
      */
     public static function testClassProperty(string $classFullName, string $propertyName, string $propertyAccessibility = 'public',
                                              string $propertyValueType = 'unset', $propertyDefaultValue = 'unset',
-                                             int    $positionInConstructor = null, bool $isStatic = false): void
+                                             ?int   $positionInConstructor = null, bool $isStatic = false): void
     {
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($classFullName);
