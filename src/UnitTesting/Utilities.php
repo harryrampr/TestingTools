@@ -160,7 +160,7 @@ class Utilities
             TestCase::assertGreaterThanOrEqual(1, $positionInConstructor, 'Class property "' . $propertyName .
                 '" parameter "positionInConstructor" is wrong, position should be 1 or greater. Please review your test configuration.');
 
-            // Test position in constructor
+            // Test property position in constructor
             $expectedValue = '2.2';
             if ($propertyValueType !== 'unset' && $propertyValueType !== 'mixed') {
                 try {
