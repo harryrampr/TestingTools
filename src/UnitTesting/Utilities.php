@@ -150,7 +150,9 @@ class Utilities
             if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
 
                 // Simple way in PHP 8.0.0 or higher
+                /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
                 if ($reflectedProp->hasDefaultValue()) {
+                    /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
                     $actualDefault = $reflectedProp->getDefaultValue();
                 } else {
                     $actualDefault = "unset";
