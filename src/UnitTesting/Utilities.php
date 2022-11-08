@@ -72,13 +72,13 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName ............. Enter class name including namespace
-     * @param string $propertyName .............. Just enter the property name
-     * @param string $propertyAccessibility ..... Choose from 'public', 'private' or 'protected'
-     * @param string $propertyValueType ......... Enter property type, use 'unset' for none.
-     * @param string $propertyDefaultValue .......Enter property default value, for no default use 'unset'
-     * @param int|null $positionInConstructor ... Enter property position in constructor, use null for no position
-     * @param bool $isStatic ............. ...... Enter true if property is static, else use false
+     * @param string $classFullName Enter class name including namespace
+     * @param string $propertyName Just enter the property name
+     * @param string $propertyAccessibility Choose from 'public', 'private' or 'protected'
+     * @param string $propertyValueType Enter property type, use 'unset' for none
+     * @param string $propertyDefaultValue Enter property default value, for no default use 'unset'
+     * @param int|null $positionInConstructor Enter property position in constructor, use null for no position
+     * @param bool $isStatic Enter true if property is static, else set to false
      *
      * @throws ReflectionException
      */
