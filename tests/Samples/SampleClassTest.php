@@ -52,7 +52,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib5()
     {
-        Utilities::testClassProperty($this->className, 'attrib5', 'private', 'bool',
+        Utilities::testClassProperty($this->className, 'attrib5', 'protected', 'bool',
             'unset', 1);
     }
 
@@ -79,7 +79,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib8()
     {
-        Utilities::testClassProperty($this->className, 'attrib8', 'protected', 'object',
+        Utilities::testClassProperty($this->className, 'attrib8', 'private', 'object',
             'unset', 4);
     }
 

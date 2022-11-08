@@ -4,14 +4,14 @@ namespace Hrpdevtools\TestingTools\Samples;
 
 class SampleClass
 {
-    public int $attrib1 = 1;
     static public string $attrib2 = '2';
+    public int $attrib1 = 1;
     public float $attrib3 = 3.1;
     public $attrib4;
-    private bool $attrib5;
+    protected bool $attrib5;
     private string $attrib6;
     private array $attrib7;
-    protected object $attrib8;
+    private object $attrib8;
 
     /**
      * @param $attrib5

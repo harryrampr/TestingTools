@@ -16,8 +16,9 @@ class Utilities
 
     /**
      * @param string $classFullName
+     * @return void
      */
-    public static function testClassExists(string $classFullName)
+    public static function testClassExists(string $classFullName): void
     {
         TestCase::assertTrue(class_exists($classFullName), 'Class "' . $classFullName .
             '" wasn\'t found.');
@@ -25,9 +26,10 @@ class Utilities
 
     /**
      * @param string $classFullName
+     * @return void
      * @throws ReflectionException
      */
-    public static function testClassIsInstantiable(string $classFullName)
+    public static function testClassIsInstantiable(string $classFullName): void
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -37,9 +39,10 @@ class Utilities
 
     /**
      * @param string $classFullName
+     * @return void
      * @throws ReflectionException
      */
-    public static function testClassIsInterface(string $classFullName)
+    public static function testClassIsInterface(string $classFullName): void
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -49,9 +52,10 @@ class Utilities
 
     /**
      * @param string $classFullName
+     * @return void
      * @throws ReflectionException
      */
-    public static function testClassIsTrait(string $classFullName)
+    public static function testClassIsTrait(string $classFullName): void
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -61,9 +65,10 @@ class Utilities
 
     /**
      * @param string $classFullName
+     * @return void
      * @throws ReflectionException
      */
-    public static function testClassIsAbstract(string $classFullName)
+    public static function testClassIsAbstract(string $classFullName): void
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -80,11 +85,12 @@ class Utilities
      * @param int|null $positionInConstructor Enter property position in constructor, use null for no position
      * @param bool $isStatic Enter true if property is static, else set to false
      *
+     * @return void
      * @throws ReflectionException
      */
     public static function testClassProperty(string $classFullName, string $propertyName, string $propertyAccessibility = 'public',
                                              string $propertyValueType = 'unset', $propertyDefaultValue = 'unset',
-                                             int    $positionInConstructor = null, bool $isStatic = false)
+                                             int    $positionInConstructor = null, bool $isStatic = false): void
     {
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($classFullName);
