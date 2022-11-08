@@ -15,7 +15,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName
+     * @param string $classFullName Enter class name including namespace
      * @return void
      */
     public static function testClassExists(string $classFullName): void
@@ -25,7 +25,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName
+     * @param string $classFullName Enter class name including namespace
      * @return void
      * @throws ReflectionException
      */
@@ -38,7 +38,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName
+     * @param string $classFullName Enter class name including namespace
      * @return void
      * @throws ReflectionException
      */
@@ -51,7 +51,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName
+     * @param string $classFullName Enter class name including namespace
      * @return void
      * @throws ReflectionException
      */
@@ -64,7 +64,7 @@ class Utilities
     }
 
     /**
-     * @param string $classFullName
+     * @param string $classFullName Enter class name including namespace
      * @return void
      * @throws ReflectionException
      */
