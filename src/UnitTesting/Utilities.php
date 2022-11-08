@@ -14,17 +14,20 @@ class Utilities
     {
     }
 
-
-    public static function testClassExists($classFullName)
+    /**
+     * @param string $classFullName
+     */
+    public static function testClassExists(string $classFullName)
     {
         TestCase::assertTrue(class_exists($classFullName), 'Class "' . $classFullName .
             '" wasn\'t found.');
     }
 
     /**
+     * @param string $classFullName
      * @throws ReflectionException
      */
-    public static function testClassIsInstantiable($classFullName)
+    public static function testClassIsInstantiable(string $classFullName)
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -33,9 +36,10 @@ class Utilities
     }
 
     /**
+     * @param string $classFullName
      * @throws ReflectionException
      */
-    public static function testClassIsInterface($classFullName)
+    public static function testClassIsInterface(string $classFullName)
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -44,9 +48,10 @@ class Utilities
     }
 
     /**
+     * @param string $classFullName
      * @throws ReflectionException
      */
-    public static function testClassIsTrait($classFullName)
+    public static function testClassIsTrait(string $classFullName)
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -55,9 +60,10 @@ class Utilities
     }
 
     /**
+     * @param string $classFullName
      * @throws ReflectionException
      */
-    public static function testClassIsAbstract($classFullName)
+    public static function testClassIsAbstract(string $classFullName)
     {
 
         $reflectedClass = new ReflectionClass($classFullName);
@@ -66,11 +72,19 @@ class Utilities
     }
 
     /**
+     * @param string $classFullName Class name including namespace
+     * @param string $propertyName Just enter the name
+     * @param string $propertyAccessibility Choose from public, private or protected
+     * @param string $propertyValueType Use 'unset' for no type
+     * @param string $propertyDefaultValue Use 'unset' for no default value for property
+     * @param int|null $positionInConstructor Use null for not in constructor
+     * @param bool $isStatic Defaults to false
+     *
      * @throws ReflectionException
      */
-    public static function testClassProperty($classFullName, string $propertyName, string $propertyAccessibility = "public",
-                                             string $propertyValueType = "unset", $propertyDefaultValue = 'unset',
-                                             int $positionInConstructor = null, bool $isStatic = false)
+    public static function testClassProperty(string $classFullName, string $propertyName, string $propertyAccessibility = 'public',
+                                             string $propertyValueType = 'unset', $propertyDefaultValue = 'unset',
+                                             int    $positionInConstructor = null, bool $isStatic = false)
     {
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($classFullName);
