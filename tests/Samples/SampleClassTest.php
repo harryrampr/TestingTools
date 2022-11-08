@@ -17,7 +17,7 @@ class SampleClassTest extends TestCase
     public function testSampleClassPropertyAttrib1()
     {
         Utilities::testClassProperty($this->className, 'attrib1', 'public', 'int',
-            1);
+            1, null, true);
     }
 
     /**
@@ -26,7 +26,7 @@ class SampleClassTest extends TestCase
     public function testSampleClassPropertyAttrib2()
     {
         Utilities::testClassProperty($this->className, 'attrib2', 'public', 'string',
-            '2', null, true);
+            '2');
     }
 
     /**

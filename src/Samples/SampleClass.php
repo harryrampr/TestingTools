@@ -4,8 +4,8 @@ namespace Hrpdevtools\TestingTools\Samples;
 
 class SampleClass
 {
-    static public string $attrib2 = '2';
-    public int $attrib1 = 1;
+    static int $attrib1 = 1;
+    public string $attrib2 = '2';
     public float $attrib3 = 3.1;
     public $attrib4;
     protected bool $attrib5;
@@ -16,8 +16,8 @@ class SampleClass
     /**
      * @param $attrib5
      * @param $attrib6
-     * @param $attrib7
-     * @param $attrib8
+     * @param array $attrib7
+     * @param object $attrib8
      */
     public function __construct($attrib5, $attrib6, array $attrib7, object $attrib8)
     {
