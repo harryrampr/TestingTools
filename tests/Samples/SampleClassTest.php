@@ -23,6 +23,33 @@ class SampleClassTest extends TestCase
     /**
      * @throws ReflectionException
      */
+    public function testSampleClassPropertyAttrib2()
+    {
+        Utilities::testClassProperty($this->className, 'attrib2', 'public', 'string',
+            '2', null, true);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testSampleClassPropertyAttrib3()
+    {
+        Utilities::testClassProperty($this->className, 'attrib3', 'public', 'float',
+            3.1, null, false);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testSampleClassPropertyAttrib4()
+    {
+        Utilities::testClassProperty($this->className, 'attrib4', 'public', 'unset',
+            null);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
     public function testSampleClassPropertyAttrib5()
     {
         Utilities::testClassProperty($this->className, 'attrib5', 'private', 'bool',
