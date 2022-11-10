@@ -16,7 +16,7 @@ class Utilities
     }
 
     /**
-     * Test if class exist
+     * Test if class exist.
      *
      * @param string $classFullName The class name including namespace.
      * @return void
@@ -28,6 +28,8 @@ class Utilities
     }
 
     /**
+     * Test if class is instantiable.
+     *
      * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
@@ -41,6 +43,8 @@ class Utilities
     }
 
     /**
+     * Test if Class is an interface.
+     *
      * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
@@ -54,6 +58,8 @@ class Utilities
     }
 
     /**
+     * Test if Class is a trait.
+     *
      * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
@@ -67,6 +73,8 @@ class Utilities
     }
 
     /**
+     * Test if Class is abstract.
+     *
      * @param string $classFullName The class name including namespace.
      * @return void
      * @throws ReflectionException
@@ -80,7 +88,7 @@ class Utilities
     }
 
     /**
-     * Test class property
+     * Test a class property for the following attributes:
      *
      * @param string $classFullName The property's class name including namespace.
      * @param string $propertyName The name of the property to test.
