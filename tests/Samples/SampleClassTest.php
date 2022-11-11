@@ -14,10 +14,33 @@ class SampleClassTest extends TestCase
     /**
      * @throws ReflectionException
      */
+    public function testClassSampleClass()
+    {
+        Utilities::testClass(
+            $this->className,
+            'Hrpdevtools\\TestingTools\\Samples',
+            [],
+            [],
+            true,
+            false,
+            true,
+            false,
+            false,
+            false);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
     public function testSampleClassPropertyAttrib1()
     {
-        Utilities::testClassProperty($this->className, 'attrib1', 'public', 'int',
-            1, null, true);
+        Utilities::testClassProperty($this->className,
+            'attrib1',
+            'public',
+            'int',
+            1,
+            null,
+            true);
     }
 
     /**

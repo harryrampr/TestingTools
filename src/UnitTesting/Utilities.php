@@ -16,74 +16,109 @@ class Utilities
     }
 
     /**
-     * Test if class exist.
+     * Test a class, interface or trait.
      *
      * @param string $classFullName The class name including namespace.
-     * @return void
-     */
-    public static function testClassExists(string $classFullName): void
-    {
-        TestCase::assertTrue(class_exists($classFullName), 'Class "' . $classFullName .
-            '" wasn\'t found.');
-    }
-
-    /**
-     * Test if class is instantiable.
-     *
-     * @param string $classFullName The class name including namespace.
+     * @param string $classNameSpace The class namespace.
+     * @param array $classesExtendIt List of parent classes and traits that extend this class.
+     * @param array $interfacesImplements List of interfaces that are implemented in this class.
+     * @param bool $hasConstructor State if the class has constructor, defaults to true.
+     * @param bool $classIsFinal State if the class is final, defaults to false.
+     * @param bool $classIsInstantiable State if the class is Instantiable, defaults to true.
+     * @param bool $classIsAbstract State if the class is static, defaults to false.
+     * @param bool $isInterface State if the class is an interface, defaults to false.
+     * @param bool $isTrait State if the class is a trait, defaults to false.
      * @return void
      * @throws ReflectionException
      */
-    public static function testClassIsInstantiable(string $classFullName): void
-    {
+    public static function testClass(string $classFullName,
+                                     string $classNameSpace = '',
+                                     array  $classesExtendIt = [],
+                                     array  $interfacesImplements = [],
+                                     bool   $hasConstructor = true,
+                                     bool   $classIsFinal = false,
+                                     bool   $classIsInstantiable = true,
+                                     bool   $classIsAbstract = false,
+                                     bool   $isInterface = false,
+                                     bool   $isTrait = false
 
+    ): void
+    {
+        $classShortName = basename($classFullName);
+
+        // Test class exist
+        self::testClassTraitOrInterfaceExist($classFullName);
+
+        // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($classFullName);
-        TestCase::assertTrue($reflectedClass->isInstantiable(), 'Class "' . $classFullName . '" isn\'t instantiable.');
+
+        // Test class namespace
+        echo "-Test that class \"{$classShortName}\" has namespace: {$classNameSpace}." . PHP_EOL;
+        TestCase::assertSame($classNameSpace, $reflectedClass->getNamespaceName(),
+            sprintf('Class "%s" namespace isn\'t %s.', $classShortName, $classNameSpace));
+
+
+        // To do: Add more tests here.
+
+        // Test if class has a constructor
+        echo sprintf('-Test that class "%s" %s a constructor.', $classShortName,
+                ($hasConstructor ? "has" : "hasn't")) . PHP_EOL;
+        TestCase::assertSame($hasConstructor, !is_null($reflectedClass->getConstructor()),
+            sprintf('Class "%s" %s a constructor.', $classShortName,
+                (!$hasConstructor ? "has" : "hasn't")));
+
+        // Test if Class is final.
+        echo sprintf('-Test that class "%s" %s final.', $classShortName,
+                ($classIsFinal ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($classIsFinal, $reflectedClass->isFinal(),
+            sprintf('Class "%s" %s final.', $classShortName, (!$classIsFinal ? "is" : "isn't")));
+
+        // Test if Class is instantiable.
+        echo sprintf('-Test that class "%s" %s instantiable.', $classShortName,
+                ($classIsInstantiable ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($classIsInstantiable, $reflectedClass->isInstantiable(),
+            sprintf('Class "%s" %s instantiable.', $classShortName, (!$classIsInstantiable ? "is" : "isn't")));
+
+        // Test if Class is abstract.
+        echo sprintf('-Test that class "%s" %s abstract.', $classShortName,
+                ($classIsAbstract ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($classIsAbstract, $reflectedClass->isAbstract(),
+            sprintf('Class "%s" %s abstract.', $classShortName, (!$classIsAbstract ? "is" : "isn't")));
+
+        // Test if is interface.
+        echo sprintf('-Test that class "%s" %s an interface.', $classShortName,
+                ($isInterface ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isInterface, $reflectedClass->isInterface(),
+            sprintf('Class "%s" %s an interface.', $classShortName, (!$isInterface ? "is" : "isn't")));
+
+        // Test if is trait.
+        echo sprintf('-Test that class "%s" %s a trait.', $classShortName,
+                ($isTrait ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isTrait, $reflectedClass->isTrait(),
+            sprintf('Class "%s" %s a trait.', $classShortName, (!$isTrait ? "is" : "isn't")));
 
     }
 
     /**
-     * Test if Class is an interface.
+     * Test that a class, interface or trait exist.
      *
-     * @param string $classFullName The class name including namespace.
+     * @param string $fullName The name including namespace.
      * @return void
-     * @throws ReflectionException
      */
-    public static function testClassIsInterface(string $classFullName): void
+    static protected function testClassTraitOrInterfaceExist(string $fullName): void
     {
+        echo PHP_EOL;
 
-        $reflectedClass = new ReflectionClass($classFullName);
-        TestCase::assertTrue($reflectedClass->isInterface(), 'Class "' . $classFullName . '" isn\'t interface.');
+        $classExits = class_exists($fullName);
+        $interfaceExits = interface_exists($fullName);
+        $traitExits = trait_exists($fullName);
 
-    }
+        $kindTested = $interfaceExits ? 'interface' : ($traitExits ? 'trait' : 'class');
 
-    /**
-     * Test if Class is a trait.
-     *
-     * @param string $classFullName The class name including namespace.
-     * @return void
-     * @throws ReflectionException
-     */
-    public static function testClassIsTrait(string $classFullName): void
-    {
-
-        $reflectedClass = new ReflectionClass($classFullName);
-        TestCase::assertTrue($reflectedClass->isTrait(), 'Class "' . $classFullName . '" isn\'t trait.');
-
-    }
-
-    /**
-     * Test if Class is abstract.
-     *
-     * @param string $classFullName The class name including namespace.
-     * @return void
-     * @throws ReflectionException
-     */
-    public static function testClassIsAbstract(string $classFullName): void
-    {
-
-        $reflectedClass = new ReflectionClass($classFullName);
-        TestCase::assertTrue($reflectedClass->isAbstract(), 'Class "' . $classFullName . '" isn\'t abstract.');
+        // Test class, interface or trait exist
+        echo sprintf('-Test that %s "%s" exist.', $kindTested, basename($fullName)) . PHP_EOL;
+        TestCase::assertTrue($classExits || $interfaceExits || $traitExits,
+            sprintf('Class "%s" wasn\'t found.', $fullName));
 
     }
 
@@ -92,41 +127,50 @@ class Utilities
      *
      * @param string $classFullName The property's class name including namespace.
      * @param string $propertyName The name of the property to test.
-     * @param string $propertyAccessibility The kind of property's accessibility ['public'|'private'|'protected'].
-     * @param string $propertyValueType The property's value type, use 'unset' for mixed.
-     * @param string $propertyDefaultValue The property's default value, use 'unset' for no default.
-     * @param int|null $positionInConstructor The property's position in __constructor, use null for no position.
-     * @param bool $isStatic State if the property is static, true or false.
+     * @param string $propertyAccessMode The kind of property's access mode, default is public.
+     * @param string $propertyValueType The property's value type, default is 'unset' for mixed.
+     * @param string $propertyDefaultValue The property's default value, default is 'unset' for no value.
+     * @param int|null $positionInConstructor The property's position in __constructor, default is null for no position.
+     * @param bool $propertyIsStatic State if the property is static, default is false.
      *
      * @return void
      * @throws ReflectionException
      */
-    public static function testClassProperty(string $classFullName, string $propertyName, string $propertyAccessibility = 'public',
-                                             string $propertyValueType = 'unset', $propertyDefaultValue = 'unset',
-                                             ?int   $positionInConstructor = null, bool $isStatic = false): void
+    public static function testClassProperty(string $classFullName,
+                                             string $propertyName,
+                                             string $propertyAccessMode = 'public',
+                                             string $propertyValueType = 'unset',
+                                                    $propertyDefaultValue = 'unset',
+                                             ?int   $positionInConstructor = null,
+                                             bool   $propertyIsStatic = false): void
     {
+        $classShortName = basename($classFullName);
+
+        // Test class exist
+        self::testClassTraitOrInterfaceExist($classFullName);
+
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($classFullName);
         $reflectedProp = $reflectedClass->getProperty($propertyName);
-        if ($propertyAccessibility != 'public') {
+        if ($propertyAccessMode != 'public') {
             $reflectedProp->setAccessible(true);
         }
 
         // Test property exists in class
+        echo "-Test that property \"{$propertyName}\" exist." . PHP_EOL;
         TestCase::assertTrue($reflectedClass->hasProperty($propertyName),
             'Class property "' . $propertyName . '" isn\'t available in class.');
 
         // Test is property is static
-        if ($reflectedProp->isStatic()) {
-            TestCase::assertTrue($isStatic,
-                'Class property "' . $propertyName . '" isn\'t static.');
-        } else {
-            TestCase::assertFalse($isStatic, 'Class property "' . $propertyName . '" is set as static.');
-        }
+        echo "-Test that property \"{$propertyName}\" " . ($propertyIsStatic ? "is" : "isn't") . " static." . PHP_EOL;
+        TestCase::assertSame($propertyIsStatic, $reflectedProp->isStatic(),
+            'property "' . $propertyName . '" ' . (!$propertyIsStatic ? "is set as" : "isn't") . ' static.');
 
         // Test property accessibility
-        $customFailMessage = 'Class property "' . $propertyName . '" accessibility isn\'t ' . $propertyAccessibility . '.';
-        switch ($propertyAccessibility) {
+        echo "-Test that property \"{$propertyName}\" is {$propertyAccessMode}." . PHP_EOL;
+        $customFailMessage = 'Class property "' . $propertyName .
+            '" accessibility isn\'t ' . $propertyAccessMode . '.';
+        switch ($propertyAccessMode) {
             case 'public' :
                 TestCase::assertTrue($reflectedProp->isPublic(), $customFailMessage);
                 break;
@@ -141,6 +185,7 @@ class Utilities
         }
 
         // Test property type
+        echo "-Test that property \"{$propertyName}\" is type {$propertyValueType}." . PHP_EOL;
         if ($reflectedProp->hasType()) {
             $actualType = $reflectedProp->getType()->getName();
         } else {
@@ -155,6 +200,7 @@ class Utilities
         if (is_null($positionInConstructor)) {
 
             //Test property default value
+            echo "-Test that property \"{$propertyName}\" default is {$propertyDefaultValue}." . PHP_EOL;
             if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
 
                 // Simple way in PHP 8.0.0 or higher
@@ -187,13 +233,14 @@ class Utilities
                 'Class property "' . $propertyName . '" default isn\'t ' . $propertyDefaultValue . '.');
 
         } else {
-
+            echo "-Test that property \"{$propertyName}\" is in position #{$positionInConstructor} in constructor." . PHP_EOL;
             // Test for inconsistencies
-            TestCase::assertTrue($propertyDefaultValue === 'unset', 'Class property "' . $propertyName .
-                '" shouldn\'t have a default value if it\'s initialized by the constructor.');
+            TestCase::assertTrue($propertyDefaultValue === 'unset', 'Class property "' .
+                $propertyName . '" shouldn\'t have a default value if it\'s initialized by the constructor.');
 
-            TestCase::assertGreaterThanOrEqual(1, $positionInConstructor, 'Class property "' . $propertyName .
-                '" parameter "positionInConstructor" is wrong, position should be 1 or greater. Please review your test configuration.');
+            TestCase::assertGreaterThanOrEqual(1, $positionInConstructor, 'Class property "' .
+                $propertyName . '" parameter "positionInConstructor" is wrong, ' .
+                'position should be 1 or greater. Please review your test configuration.');
 
             // Test property position in constructor
             $expectedValue = '2.2';
@@ -201,15 +248,15 @@ class Utilities
                 try {
                     settype($expectedValue, $propertyValueType);
                 } catch (Error $e) {
-                    TestCase::fail('We were not able to calculate expected value for class property "' . $propertyName .
-                        '" with type ' . $propertyValueType . '.');
+                    TestCase::fail('We were not able to calculate expected value for class property "' .
+                        $propertyName . '" with type ' . $propertyValueType . '.');
                 }
             }
 
             // Test if constructor exist
             $classConstructor = $reflectedClass->getConstructor();
             TestCase::assertFalse(is_null($classConstructor),
-                'There is no constructor for class property "' . $propertyName . '".');
+                sprintf('There is no constructor for class property "%s".', $propertyName));
 
             // Generate array of constructors params
             $constructorParams = $classConstructor->getParameters();
@@ -227,13 +274,15 @@ class Utilities
                 $classConstructorParams[$positionInConstructor - 1] = $expectedValue;
             } catch (Error $e) {
                 TestCase::fail('Class property "' . $propertyName .
-                    '" parameter "positionInConstructor" is wrong, position should be from 1 to n parameters. Please review your test configuration.');
+                    '" parameter "positionInConstructor" is wrong, ' .
+                    'position should be from 1 to n parameters. Please review your test configuration.');
             }
 
             try {
                 $newObject = $reflectedClass->newInstanceArgs($classConstructorParams);
             } catch (Error $e) {
-                TestCase::fail('There is a mismatch between the constructor parameters types and the class properties types.');
+                TestCase::fail('There is a mismatch between the constructor parameters ' .
+                    'types and the class properties types.');
             }
 
             if ($reflectedProp->isStatic()) {
@@ -243,9 +292,9 @@ class Utilities
             }
 
             TestCase::assertSame($expectedValue, $actualValue,
-                'Class property "' . $propertyName . '" positionInConstructor isn\'t ' . $positionInConstructor . '.');
-
+                'Class property "' . $propertyName . '" position in constructor isn\'t ' .
+                $positionInConstructor . '.');
         }
-
     }
+
 }
