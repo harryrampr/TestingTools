@@ -7,8 +7,126 @@ use PHPUnit\Framework\TestCase as TestCase;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * Utilities that simplify PHPUnit testing of classes, interfaces and traits.
+ * @author Harry Ramirez
+ */
 trait ClassUtilities
 {
+
+    /**
+     * Test a class, interface or trait.
+     *
+     * @param string $structureFullName The structure name including namespace.
+     * @param string $nameSpace The structure namespace.
+     * @param array $structuresExtendIt List of parent classes and traits that extend this structure.
+     * @param array $interfacesImplements List of interfaces that are implemented in this structure.
+     * @param bool $hasConstructor State if the structure has constructor, defaults to true.
+     * @param bool $isFinal State if the structure is final, defaults to false.
+     * @param bool $isInstantiable State if the structure is Instantiable, defaults to true.
+     * @param bool $isAbstract State if the structure is static, defaults to false.
+     * @param bool $isInterface State if the structure is an interface, defaults to false.
+     * @param bool $isTrait State if the structure is a trait, defaults to false.
+     * @return void
+     * @throws ReflectionException
+     */
+    public function utilityTestClassTraitOrInterface(string $structureFullName,
+                                                     string $nameSpace = '',
+                                                     array  $structuresExtendIt = [],
+                                                     array  $interfacesImplements = [],
+                                                     bool   $hasConstructor = true,
+                                                     bool   $isFinal = false,
+                                                     bool   $isInstantiable = true,
+                                                     bool   $isAbstract = false,
+                                                     bool   $isInterface = false,
+                                                     bool   $isTrait = false
+
+    ): void
+    {
+        $structureShortName = basename($structureFullName);
+
+        // Find if file exist and what kind of structure was found
+        $structureType = $this->utilityExistsClassTraitOrInterface($structureFullName);
+
+        // Test class, interface or trait exist
+        echo PHP_EOL;
+        echo sprintf('-Test that structure "%s" exist.', $structureShortName) . PHP_EOL;
+        TestCase::assertTrue($structureType !== '',
+            sprintf("Structure \"%s\" wasn't found.", $structureFullName));
+
+        // Get ready to use Reflection utilities
+        $reflectedClass = new ReflectionClass($structureFullName);
+
+        // Test structure namespace
+        echo sprintf('-Test that structure "%s" has namespace: %s.', $structureShortName, $nameSpace) . PHP_EOL;
+        TestCase::assertSame($nameSpace, $reflectedClass->getNamespaceName(),
+            sprintf('Structure "%s" namespace isn\'t %s.', $structureShortName, $nameSpace));
+
+
+        // Todo: Add more tests here.
+
+        // Test if structure has a constructor
+        echo sprintf('-Test that structure "%s" %s a constructor.', $structureShortName,
+                ($hasConstructor ? "has" : "hasn't")) . PHP_EOL;
+        TestCase::assertSame($hasConstructor, !is_null($reflectedClass->getConstructor()),
+            sprintf('Structure "%s" %s a constructor.', $structureShortName,
+                (!$hasConstructor ? "has" : "hasn't")));
+
+        // Test if structure is final.
+        echo sprintf('-Test that structure "%s" %s final.', $structureShortName,
+                ($isFinal ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isFinal, $reflectedClass->isFinal(),
+            sprintf('Structure "%s" %s final.', $structureShortName, (!$isFinal ? "is" : "isn't")));
+
+        // Test if Structure is instantiable.
+        echo sprintf('-Test that structure "%s" %s instantiable.', $structureShortName,
+                ($isInstantiable ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isInstantiable, $reflectedClass->isInstantiable(),
+            sprintf('Structure "%s" %s instantiable.', $structureShortName, (!$isInstantiable ? "is" : "isn't")));
+
+        // Test if Structure is abstract.
+        echo sprintf('-Test that structure "%s" %s abstract.', $structureShortName,
+                ($isAbstract ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isAbstract, $reflectedClass->isAbstract(),
+            sprintf('Structure "%s" %s abstract.', $structureShortName, (!$isAbstract ? "is" : "isn't")));
+
+        // Test if is interface.
+        echo sprintf('-Test that structure "%s" %s an interface.', $structureShortName,
+                ($isInterface ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isInterface, $reflectedClass->isInterface(),
+            sprintf('Structure "%s" %s an interface.', $structureShortName, (!$isInterface ? "is" : "isn't")));
+
+        // Test if is trait.
+        echo sprintf('-Test that structure "%s" %s a trait.', $structureShortName,
+                ($isTrait ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isTrait, $reflectedClass->isTrait(),
+            sprintf('Structure "%s" %s a trait.', $structureShortName, (!$isTrait ? "is" : "isn't")));
+
+        // Test if is class.
+        $isClass = !$isInterface && !$isTrait;
+        echo sprintf('-Test that structure "%s" %s a class.', $structureShortName,
+                ($isClass ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isClass, $structureType === 'class',
+            sprintf('Structure "%s" %s a class.', $structureShortName, (!$isClass ? "is" : "isn't")));
+
+    }
+
+    /**
+     * Find if a structure exists, either class, interface or trait.
+     *
+     * @param string $fullName The name including namespace.
+     * @return string The type of structure found, an empty string if nothing found.
+     */
+    private function utilityExistsClassTraitOrInterface(string $fullName): string
+    {
+
+        if (class_exists($fullName)) return 'class';
+        if (interface_exists($fullName)) return 'interface';
+        if (trait_exists($fullName)) return 'trait';
+
+        // Not found
+        return '';
+    }
 
     /**
      * Test a structure property for the following attributes:
@@ -25,13 +143,13 @@ trait ClassUtilities
      * @throws ReflectionException
      * @noinspection PhpMissingParamTypeInspection
      */
-    public function utilityTestClassProperty(string $parentStructureFullName,
-                                             string $propertyName,
-                                             string $propertyAccessMode = 'public',
-                                             string $propertyValueType = 'unset',
-                                                    $propertyDefaultValue = 'unset',
-                                             ?int   $positionInConstructor = null,
-                                             bool   $propertyIsStatic = false): void
+    public function utilityToTestClassProperty(string $parentStructureFullName,
+                                               string $propertyName,
+                                               string $propertyAccessMode = 'public',
+                                               string $propertyValueType = 'unset',
+                                                      $propertyDefaultValue = 'unset',
+                                               ?int   $positionInConstructor = null,
+                                               bool   $propertyIsStatic = false): void
     {
 
         // Find if file exist and what kind of structure was found
@@ -219,120 +337,6 @@ trait ClassUtilities
                     basename($parentStructureFullName), 'able to test the property\'s position in constructor'));
             }
         }
-    }
-
-    /**
-     * Find if a structure exists, either class, interface or trait.
-     *
-     * @param string $fullName The name including namespace.
-     * @return string The type of structure found, an empty string if nothing found.
-     */
-    private function utilityExistsClassTraitOrInterface(string $fullName): string
-    {
-
-        if (class_exists($fullName)) return 'class';
-        if (interface_exists($fullName)) return 'interface';
-        if (trait_exists($fullName)) return 'trait';
-
-        // Not found
-        return '';
-    }
-
-    /**
-     * Test a class, interface or trait.
-     *
-     * @param string $structureFullName The structure name including namespace.
-     * @param string $nameSpace The structure namespace.
-     * @param array $structuresExtendIt List of parent classes and traits that extend this structure.
-     * @param array $interfacesImplements List of interfaces that are implemented in this structure.
-     * @param bool $hasConstructor State if the structure has constructor, defaults to true.
-     * @param bool $isFinal State if the structure is final, defaults to false.
-     * @param bool $isInstantiable State if the structure is Instantiable, defaults to true.
-     * @param bool $isAbstract State if the structure is static, defaults to false.
-     * @param bool $isInterface State if the structure is an interface, defaults to false.
-     * @param bool $isTrait State if the structure is a trait, defaults to false.
-     * @return void
-     * @throws ReflectionException
-     */
-    public function utilityTestClassTraitOrInterface(string $structureFullName,
-                                                     string $nameSpace = '',
-                                                     array  $structuresExtendIt = [],
-                                                     array  $interfacesImplements = [],
-                                                     bool   $hasConstructor = true,
-                                                     bool   $isFinal = false,
-                                                     bool   $isInstantiable = true,
-                                                     bool   $isAbstract = false,
-                                                     bool   $isInterface = false,
-                                                     bool   $isTrait = false
-
-    ): void
-    {
-        $structureShortName = basename($structureFullName);
-
-        // Find if file exist and what kind of structure was found
-        $structureType = $this->utilityExistsClassTraitOrInterface($structureFullName);
-
-        // Test class, interface or trait exist
-        echo PHP_EOL;
-        echo sprintf('-Test that structure "%s" exist.', $structureShortName) . PHP_EOL;
-        TestCase::assertTrue($structureType !== '',
-            sprintf("Structure \"%s\" wasn't found.", $structureFullName));
-
-        // Get ready to use Reflection utilities
-        $reflectedClass = new ReflectionClass($structureFullName);
-
-        // Test structure namespace
-        echo sprintf('-Test that structure "%s" has namespace: %s.', $structureShortName, $nameSpace) . PHP_EOL;
-        TestCase::assertSame($nameSpace, $reflectedClass->getNamespaceName(),
-            sprintf('Structure "%s" namespace isn\'t %s.', $structureShortName, $nameSpace));
-
-
-        // Todo: Add more tests here.
-
-        // Test if structure has a constructor
-        echo sprintf('-Test that structure "%s" %s a constructor.', $structureShortName,
-                ($hasConstructor ? "has" : "hasn't")) . PHP_EOL;
-        TestCase::assertSame($hasConstructor, !is_null($reflectedClass->getConstructor()),
-            sprintf('Structure "%s" %s a constructor.', $structureShortName,
-                (!$hasConstructor ? "has" : "hasn't")));
-
-        // Test if structure is final.
-        echo sprintf('-Test that structure "%s" %s final.', $structureShortName,
-                ($isFinal ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isFinal, $reflectedClass->isFinal(),
-            sprintf('Structure "%s" %s final.', $structureShortName, (!$isFinal ? "is" : "isn't")));
-
-        // Test if Structure is instantiable.
-        echo sprintf('-Test that structure "%s" %s instantiable.', $structureShortName,
-                ($isInstantiable ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isInstantiable, $reflectedClass->isInstantiable(),
-            sprintf('Structure "%s" %s instantiable.', $structureShortName, (!$isInstantiable ? "is" : "isn't")));
-
-        // Test if Structure is abstract.
-        echo sprintf('-Test that structure "%s" %s abstract.', $structureShortName,
-                ($isAbstract ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isAbstract, $reflectedClass->isAbstract(),
-            sprintf('Structure "%s" %s abstract.', $structureShortName, (!$isAbstract ? "is" : "isn't")));
-
-        // Test if is interface.
-        echo sprintf('-Test that structure "%s" %s an interface.', $structureShortName,
-                ($isInterface ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isInterface, $reflectedClass->isInterface(),
-            sprintf('Structure "%s" %s an interface.', $structureShortName, (!$isInterface ? "is" : "isn't")));
-
-        // Test if is trait.
-        echo sprintf('-Test that structure "%s" %s a trait.', $structureShortName,
-                ($isTrait ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isTrait, $reflectedClass->isTrait(),
-            sprintf('Structure "%s" %s a trait.', $structureShortName, (!$isTrait ? "is" : "isn't")));
-
-        // Test if is class.
-        $isClass = !$isInterface && !$isTrait;
-        echo sprintf('-Test that structure "%s" %s a class.', $structureShortName,
-                ($isClass ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isClass, $structureType === 'class',
-            sprintf('Structure "%s" %s a class.', $structureShortName, (!$isClass ? "is" : "isn't")));
-
     }
 
 }
