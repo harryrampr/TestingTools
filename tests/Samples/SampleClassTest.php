@@ -3,12 +3,14 @@
 namespace Samples;
 
 use Hrpdevtools\TestingTools\Samples\SampleClass;
+use Hrpdevtools\TestingTools\UnitTesting\ClassUtilities;
 use PHPUnit\Framework\TestCase;
-use Hrpdevtools\TestingTools\UnitTesting\Utilities;
 use ReflectionException;
 
 class SampleClassTest extends TestCase
 {
+    use ClassUtilities;
+
     public string $className = 'Hrpdevtools\\TestingTools\\Samples\\SampleClass';
 
     /**
@@ -16,7 +18,7 @@ class SampleClassTest extends TestCase
      */
     public function testClassSampleClass()
     {
-        Utilities::testClass(
+        $this->utilityTestClassTraitOrInterface(
             $this->className,
             'Hrpdevtools\\TestingTools\\Samples',
             [],
@@ -34,7 +36,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib1()
     {
-        Utilities::testClassProperty($this->className,
+        $this->utilityTestClassProperty($this->className,
             'attrib1',
             'public',
             'int',
@@ -48,7 +50,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib2()
     {
-        Utilities::testClassProperty($this->className, 'attrib2', 'public', 'string',
+        $this->utilityTestClassProperty($this->className, 'attrib2', 'public', 'string',
             '2');
     }
 
@@ -57,7 +59,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib3()
     {
-        Utilities::testClassProperty($this->className, 'attrib3', 'public', 'float',
+        $this->utilityTestClassProperty($this->className, 'attrib3', 'public', 'float',
             3.1, null, false);
     }
 
@@ -66,7 +68,11 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib4()
     {
-        Utilities::testClassProperty($this->className, 'attrib4', 'public', 'unset',
+        $this->utilityTestClassProperty(
+            $this->className,
+            'attrib4',
+            'public',
+            'unset',
             null);
     }
 
@@ -75,7 +81,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib5()
     {
-        Utilities::testClassProperty($this->className, 'attrib5', 'protected', 'bool',
+        $this->utilityTestClassProperty($this->className, 'attrib5', 'protected', 'bool',
             'unset', 1);
     }
 
@@ -84,7 +90,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib6()
     {
-        Utilities::testClassProperty($this->className, 'attrib6', 'private', 'string',
+        $this->utilityTestClassProperty($this->className, 'attrib6', 'private', 'string',
             'unset', 2);
     }
 
@@ -93,7 +99,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib7()
     {
-        Utilities::testClassProperty($this->className, 'attrib7', 'private', 'array',
+        $this->utilityTestClassProperty($this->className, 'attrib7', 'private', 'array',
             'unset', 3);
     }
 
@@ -102,7 +108,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib8()
     {
-        Utilities::testClassProperty($this->className, 'attrib8', 'private', 'object',
+        $this->utilityTestClassProperty($this->className, 'attrib8', 'private', 'object',
             'unset', 4);
     }
 

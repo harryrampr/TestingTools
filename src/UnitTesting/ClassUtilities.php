@@ -7,113 +7,8 @@ use PHPUnit\Framework\TestCase as TestCase;
 use ReflectionClass;
 use ReflectionException;
 
-class Utilities
+trait ClassUtilities
 {
-
-    /**
-     * Test a class, interface or trait.
-     *
-     * @param string $classFullName The class name including namespace.
-     * @param string $classNameSpace The class namespace.
-     * @param array $classesExtendIt List of parent classes and traits that extend this class.
-     * @param array $interfacesImplements List of interfaces that are implemented in this class.
-     * @param bool $hasConstructor State if the class has constructor, defaults to true.
-     * @param bool $classIsFinal State if the class is final, defaults to false.
-     * @param bool $classIsInstantiable State if the class is Instantiable, defaults to true.
-     * @param bool $classIsAbstract State if the class is static, defaults to false.
-     * @param bool $isInterface State if the class is an interface, defaults to false.
-     * @param bool $isTrait State if the class is a trait, defaults to false.
-     * @return void
-     * @throws ReflectionException
-     */
-    public static function testClass(string $classFullName,
-                                     string $classNameSpace = '',
-                                     array  $classesExtendIt = [],
-                                     array  $interfacesImplements = [],
-                                     bool   $hasConstructor = true,
-                                     bool   $classIsFinal = false,
-                                     bool   $classIsInstantiable = true,
-                                     bool   $classIsAbstract = false,
-                                     bool   $isInterface = false,
-                                     bool   $isTrait = false
-
-    ): void
-    {
-        $classShortName = basename($classFullName);
-
-        // Test class exist
-        self::testClassTraitOrInterfaceExist($classFullName);
-
-        // Get ready to use Reflection utilities
-        $reflectedClass = new ReflectionClass($classFullName);
-
-        // Test class namespace
-        echo sprintf('-Test that class "%s" has namespace: %s.', $classShortName, $classNameSpace) . PHP_EOL;
-        TestCase::assertSame($classNameSpace, $reflectedClass->getNamespaceName(),
-            sprintf('Class "%s" namespace isn\'t %s.', $classShortName, $classNameSpace));
-
-
-        // Todo: Add more tests here.
-
-        // Test if class has a constructor
-        echo sprintf('-Test that class "%s" %s a constructor.', $classShortName,
-                ($hasConstructor ? "has" : "hasn't")) . PHP_EOL;
-        TestCase::assertSame($hasConstructor, !is_null($reflectedClass->getConstructor()),
-            sprintf('Class "%s" %s a constructor.', $classShortName,
-                (!$hasConstructor ? "has" : "hasn't")));
-
-        // Test if Class is final.
-        echo sprintf('-Test that class "%s" %s final.', $classShortName,
-                ($classIsFinal ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($classIsFinal, $reflectedClass->isFinal(),
-            sprintf('Class "%s" %s final.', $classShortName, (!$classIsFinal ? "is" : "isn't")));
-
-        // Test if Class is instantiable.
-        echo sprintf('-Test that class "%s" %s instantiable.', $classShortName,
-                ($classIsInstantiable ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($classIsInstantiable, $reflectedClass->isInstantiable(),
-            sprintf('Class "%s" %s instantiable.', $classShortName, (!$classIsInstantiable ? "is" : "isn't")));
-
-        // Test if Class is abstract.
-        echo sprintf('-Test that class "%s" %s abstract.', $classShortName,
-                ($classIsAbstract ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($classIsAbstract, $reflectedClass->isAbstract(),
-            sprintf('Class "%s" %s abstract.', $classShortName, (!$classIsAbstract ? "is" : "isn't")));
-
-        // Test if is interface.
-        echo sprintf('-Test that class "%s" %s an interface.', $classShortName,
-                ($isInterface ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isInterface, $reflectedClass->isInterface(),
-            sprintf('Class "%s" %s an interface.', $classShortName, (!$isInterface ? "is" : "isn't")));
-
-        // Test if is trait.
-        echo sprintf('-Test that class "%s" %s a trait.', $classShortName,
-                ($isTrait ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($isTrait, $reflectedClass->isTrait(),
-            sprintf('Class "%s" %s a trait.', $classShortName, (!$isTrait ? "is" : "isn't")));
-
-    }
-
-    /**
-     * Test that a class, interface or trait exist.
-     *
-     * @param string $fullName The name including namespace.
-     * @return void
-     */
-    static protected function testClassTraitOrInterfaceExist(string $fullName): void
-    {
-        echo PHP_EOL;
-
-        $classExits = class_exists($fullName);
-        $interfaceExits = interface_exists($fullName);
-        $traitExits = trait_exists($fullName);
-
-        // Test class, interface or trait exist
-        echo sprintf('-Test that class "%s" exist.', basename($fullName)) . PHP_EOL;
-        TestCase::assertTrue($classExits || $interfaceExits || $traitExits,
-            sprintf("Class \"%s\" wasn't found.", $fullName));
-
-    }
 
     /**
      * Test a class property for the following attributes:
@@ -130,7 +25,7 @@ class Utilities
      * @throws ReflectionException
      * @noinspection PhpMissingParamTypeInspection
      */
-    public static function testClassProperty(string $classFullName,
+    public function utilityTestClassProperty(string $classFullName,
                                              string $propertyName,
                                              string $propertyAccessMode = 'public',
                                              string $propertyValueType = 'unset',
@@ -140,7 +35,7 @@ class Utilities
     {
 
         // Test class exist
-        self::testClassTraitOrInterfaceExist($classFullName);
+        $this->utilityExistsClassTraitOrInterface($classFullName);
 
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($classFullName);
@@ -194,9 +89,26 @@ class Utilities
 
         if (is_null($positionInConstructor)) {
 
+            // Get the printable value of default value
+            if (is_scalar($propertyDefaultValue)) {
+                $defaultValuePrintable = $propertyDefaultValue;
+            } else {
+                if (is_null($propertyDefaultValue)) {
+                    $defaultValuePrintable = "set to null";
+                } elseif (is_array($propertyDefaultValue)) {
+                    $defaultValuePrintable = "an array";
+                } elseif (is_object($propertyDefaultValue)) {
+                    $defaultValuePrintable = "an object";
+                } elseif (is_callable($propertyDefaultValue)) {
+                    $defaultValuePrintable = "a callable";
+                } else {
+                    $defaultValuePrintable = "an item";
+                }
+            }
+
             //Test property default value
-            echo sprintf('-Test that property "%s" default is %s.',
-                    $propertyName, $propertyDefaultValue) . PHP_EOL;
+            echo sprintf('-Test that property "%s" default is %s.', $propertyName,
+                    $defaultValuePrintable) . PHP_EOL;
             if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
 
                 // Simple way in PHP 8.0.0 or higher
@@ -226,7 +138,7 @@ class Utilities
                 }
             }
             TestCase::assertSame($propertyDefaultValue, $actualDefault,
-                sprintf('Class property "%s" default isn\'t %s.', $propertyName, $propertyDefaultValue));
+                sprintf('Class property "%s" default isn\'t %s.', $propertyName, $defaultValuePrintable));
 
         } else {
             echo sprintf('-Test that property "%s" is in position #%d in constructor.',
@@ -294,6 +206,111 @@ class Utilities
                 sprintf('Class property "%s" position in constructor isn\'t %d.',
                     $propertyName, $positionInConstructor));
         }
+    }
+
+    /**
+     * Test that a class, interface or trait exist.
+     *
+     * @param string $fullName The name including namespace.
+     * @return void
+     */
+    protected function utilityExistsClassTraitOrInterface(string $fullName): void
+    {
+        echo PHP_EOL;
+
+        $classExits = class_exists($fullName);
+        $interfaceExits = interface_exists($fullName);
+        $traitExits = trait_exists($fullName);
+
+        // Test class, interface or trait exist
+        echo sprintf('-Test that class "%s" exist.', basename($fullName)) . PHP_EOL;
+        TestCase::assertTrue($classExits || $interfaceExits || $traitExits,
+            sprintf("Class \"%s\" wasn't found.", $fullName));
+
+    }
+
+    /**
+     * Test a class, interface or trait.
+     *
+     * @param string $classFullName The class name including namespace.
+     * @param string $classNameSpace The class namespace.
+     * @param array $classesExtendIt List of parent classes and traits that extend this class.
+     * @param array $interfacesImplements List of interfaces that are implemented in this class.
+     * @param bool $hasConstructor State if the class has constructor, defaults to true.
+     * @param bool $classIsFinal State if the class is final, defaults to false.
+     * @param bool $classIsInstantiable State if the class is Instantiable, defaults to true.
+     * @param bool $classIsAbstract State if the class is static, defaults to false.
+     * @param bool $isInterface State if the class is an interface, defaults to false.
+     * @param bool $isTrait State if the class is a trait, defaults to false.
+     * @return void
+     * @throws ReflectionException
+     */
+    public function utilityTestClassTraitOrInterface(string $classFullName,
+                                                     string $classNameSpace = '',
+                                                     array  $classesExtendIt = [],
+                                                     array  $interfacesImplements = [],
+                                                     bool   $hasConstructor = true,
+                                                     bool   $classIsFinal = false,
+                                                     bool   $classIsInstantiable = true,
+                                                     bool   $classIsAbstract = false,
+                                                     bool   $isInterface = false,
+                                                     bool   $isTrait = false
+
+    ): void
+    {
+        $classShortName = basename($classFullName);
+
+        // Test class exist
+        $this->utilityExistsClassTraitOrInterface($classFullName);
+
+        // Get ready to use Reflection utilities
+        $reflectedClass = new ReflectionClass($classFullName);
+
+        // Test class namespace
+        echo sprintf('-Test that class "%s" has namespace: %s.', $classShortName, $classNameSpace) . PHP_EOL;
+        TestCase::assertSame($classNameSpace, $reflectedClass->getNamespaceName(),
+            sprintf('Class "%s" namespace isn\'t %s.', $classShortName, $classNameSpace));
+
+
+        // Todo: Add more tests here.
+
+        // Test if class has a constructor
+        echo sprintf('-Test that class "%s" %s a constructor.', $classShortName,
+                ($hasConstructor ? "has" : "hasn't")) . PHP_EOL;
+        TestCase::assertSame($hasConstructor, !is_null($reflectedClass->getConstructor()),
+            sprintf('Class "%s" %s a constructor.', $classShortName,
+                (!$hasConstructor ? "has" : "hasn't")));
+
+        // Test if Class is final.
+        echo sprintf('-Test that class "%s" %s final.', $classShortName,
+                ($classIsFinal ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($classIsFinal, $reflectedClass->isFinal(),
+            sprintf('Class "%s" %s final.', $classShortName, (!$classIsFinal ? "is" : "isn't")));
+
+        // Test if Class is instantiable.
+        echo sprintf('-Test that class "%s" %s instantiable.', $classShortName,
+                ($classIsInstantiable ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($classIsInstantiable, $reflectedClass->isInstantiable(),
+            sprintf('Class "%s" %s instantiable.', $classShortName, (!$classIsInstantiable ? "is" : "isn't")));
+
+        // Test if Class is abstract.
+        echo sprintf('-Test that class "%s" %s abstract.', $classShortName,
+                ($classIsAbstract ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($classIsAbstract, $reflectedClass->isAbstract(),
+            sprintf('Class "%s" %s abstract.', $classShortName, (!$classIsAbstract ? "is" : "isn't")));
+
+        // Test if is interface.
+        echo sprintf('-Test that class "%s" %s an interface.', $classShortName,
+                ($isInterface ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isInterface, $reflectedClass->isInterface(),
+            sprintf('Class "%s" %s an interface.', $classShortName, (!$isInterface ? "is" : "isn't")));
+
+        // Test if is trait.
+        echo sprintf('-Test that class "%s" %s a trait.', $classShortName,
+                ($isTrait ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isTrait, $reflectedClass->isTrait(),
+            sprintf('Class "%s" %s a trait.', $classShortName, (!$isTrait ? "is" : "isn't")));
+
     }
 
 }
