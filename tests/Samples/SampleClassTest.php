@@ -18,7 +18,7 @@ class SampleClassTest extends TestCase
      */
     public function testClassSampleClass()
     {
-        $this->utilityTestClassTraitOrInterface(
+        $this->utilityToTestClassTraitOrInterface(
             $this->className,
             'Hrpdevtools\\TestingTools\\Samples',
             [],
