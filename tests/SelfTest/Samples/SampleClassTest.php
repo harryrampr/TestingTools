@@ -1,9 +1,9 @@
 <?php
 
-namespace Samples;
+namespace SelfTest\Samples;
 
-use Hrpdevtools\TestingTools\Samples\SampleClass;
-use Hrpdevtools\TestingTools\UnitTesting\ClassUtilities;
+use TestingTools\Samples\SampleClass;
+use TestingTools\UnitTesting\ClassUtilities;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
@@ -11,7 +11,7 @@ class SampleClassTest extends TestCase
 {
     use ClassUtilities;
 
-    public string $className = 'Hrpdevtools\\TestingTools\\Samples\\SampleClass';
+    public string $className = 'TestingTools\\Samples\\SampleClass';
 
     /**
      * @throws ReflectionException
@@ -20,7 +20,7 @@ class SampleClassTest extends TestCase
     {
         $this->utilityToTestClassTraitOrInterface(
             $this->className,
-            'Hrpdevtools\\TestingTools\\Samples',
+            'TestingTools\\Samples',
             [],
             [],
             true,

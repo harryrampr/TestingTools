@@ -1,11 +1,11 @@
 <?php
 
-namespace Hrpdevtools\TestingTools\Samples;
+namespace TestingTools\Samples;
 
 interface SampleInterface
 {
     public function test1();
 
     public function test2();
-    
+
 }

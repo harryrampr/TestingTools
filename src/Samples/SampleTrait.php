@@ -1,10 +1,18 @@
 <?php
 
-namespace Hrpdevtools\TestingTools\Samples;
+namespace TestingTools\Samples;
 
 trait SampleTrait
 {
     protected int $test = 10;
+
+    /**
+     * @return int
+     */
+    public function getTest(): int
+    {
+        return $this->test;
+    }
 
     /**
      * @param int $test
@@ -12,14 +20,6 @@ trait SampleTrait
     public function setTest(int $test): void
     {
         $this->test = $test;
-    }
-    
-    /**
-     * @return int
-     */
-    public function getTest(): int
-    {
-        return $this->test;
     }
 
 }

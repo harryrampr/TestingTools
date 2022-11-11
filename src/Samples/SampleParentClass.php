@@ -1,6 +1,6 @@
 <?php
 
-namespace Hrpdevtools\TestingTools\Samples;
+namespace TestingTools\Samples;
 
 abstract class SampleParentClass
 {

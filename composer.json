@@ -16,8 +16,13 @@
     "phpunit/phpunit": "^9"
   },
   "autoload": {
-    "psr-4": {
-      "Hrpdevtools\\TestingTools\\": "src"
-    }
+    "classmap": [
+      "src/"
+    ]
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
   }
 }
