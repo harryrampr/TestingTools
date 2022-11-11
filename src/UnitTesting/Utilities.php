@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase as TestCase;
 use ReflectionClass;
 use ReflectionException;
 
-class ClassUtilities
+class Utilities
 {
 
     /**
