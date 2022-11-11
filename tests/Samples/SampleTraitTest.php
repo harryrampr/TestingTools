@@ -21,7 +21,7 @@ class SampleTraitTest extends TestCase
             [],
             false,
             false,
-            true,
+            false,
             false,
             false,
             true);

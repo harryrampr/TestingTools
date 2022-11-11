@@ -7,13 +7,8 @@ use PHPUnit\Framework\TestCase as TestCase;
 use ReflectionClass;
 use ReflectionException;
 
-class Utilities
+class ClassUtilities
 {
-    // Keep this function private so class can't initialize
-    private function __construct()
-    {
-        // Keep empty, do not remove or alter.
-    }
 
     /**
      * Test a class, interface or trait.
@@ -53,12 +48,12 @@ class Utilities
         $reflectedClass = new ReflectionClass($classFullName);
 
         // Test class namespace
-        echo "-Test that class \"{$classShortName}\" has namespace: {$classNameSpace}." . PHP_EOL;
+        echo sprintf('-Test that class "%s" has namespace: %s.', $classShortName, $classNameSpace) . PHP_EOL;
         TestCase::assertSame($classNameSpace, $reflectedClass->getNamespaceName(),
             sprintf('Class "%s" namespace isn\'t %s.', $classShortName, $classNameSpace));
 
 
-        // To do: Add more tests here.
+        // Todo: Add more tests here.
 
         // Test if class has a constructor
         echo sprintf('-Test that class "%s" %s a constructor.', $classShortName,
@@ -113,12 +108,10 @@ class Utilities
         $interfaceExits = interface_exists($fullName);
         $traitExits = trait_exists($fullName);
 
-        $kindTested = $interfaceExits ? 'interface' : ($traitExits ? 'trait' : 'class');
-
         // Test class, interface or trait exist
-        echo sprintf('-Test that %s "%s" exist.', $kindTested, basename($fullName)) . PHP_EOL;
+        echo sprintf('-Test that class "%s" exist.', basename($fullName)) . PHP_EOL;
         TestCase::assertTrue($classExits || $interfaceExits || $traitExits,
-            sprintf('Class "%s" wasn\'t found.', $fullName));
+            sprintf("Class \"%s\" wasn't found.", $fullName));
 
     }
 
@@ -135,6 +128,7 @@ class Utilities
      *
      * @return void
      * @throws ReflectionException
+     * @noinspection PhpMissingParamTypeInspection
      */
     public static function testClassProperty(string $classFullName,
                                              string $propertyName,
@@ -144,7 +138,6 @@ class Utilities
                                              ?int   $positionInConstructor = null,
                                              bool   $propertyIsStatic = false): void
     {
-        $classShortName = basename($classFullName);
 
         // Test class exist
         self::testClassTraitOrInterfaceExist($classFullName);
@@ -157,19 +150,21 @@ class Utilities
         }
 
         // Test property exists in class
-        echo "-Test that property \"{$propertyName}\" exist." . PHP_EOL;
+        echo sprintf('-Test that property "%s" exist.', $propertyName) . PHP_EOL;
         TestCase::assertTrue($reflectedClass->hasProperty($propertyName),
-            'Class property "' . $propertyName . '" isn\'t available in class.');
+            sprintf('Class property "%s" isn\'t available in class.', $propertyName));
 
         // Test is property is static
-        echo "-Test that property \"{$propertyName}\" " . ($propertyIsStatic ? "is" : "isn't") . " static." . PHP_EOL;
+        echo sprintf('-Test that property "%s" %s static.',
+                $propertyName, ($propertyIsStatic ? "is" : "isn't")) . PHP_EOL;
         TestCase::assertSame($propertyIsStatic, $reflectedProp->isStatic(),
-            'property "' . $propertyName . '" ' . (!$propertyIsStatic ? "is set as" : "isn't") . ' static.');
+            sprintf('Class property "%s" %s static.', $propertyName,
+                (!$propertyIsStatic ? "is set as" : "isn't")));
 
         // Test property accessibility
-        echo "-Test that property \"{$propertyName}\" is {$propertyAccessMode}." . PHP_EOL;
-        $customFailMessage = 'Class property "' . $propertyName .
-            '" accessibility isn\'t ' . $propertyAccessMode . '.';
+        echo sprintf('-Test that property "%s" is %s.', $propertyName, $propertyAccessMode) . PHP_EOL;
+        $customFailMessage = sprintf('Class property "%s" accessibility isn\'t %s.',
+            $propertyName, $propertyAccessMode);
         switch ($propertyAccessMode) {
             case 'public' :
                 TestCase::assertTrue($reflectedProp->isPublic(), $customFailMessage);
@@ -181,11 +176,11 @@ class Utilities
                 TestCase::assertTrue($reflectedProp->isProtected(), $customFailMessage);
                 break;
             default:
-                TestCase::fail('Class property "' . $propertyName . '" accessibility is unconfirmed.');
+                TestCase::fail(sprintf('Class property "%s" accessibility is unconfirmed.', $propertyName));
         }
 
         // Test property type
-        echo "-Test that property \"{$propertyName}\" is type {$propertyValueType}." . PHP_EOL;
+        echo sprintf('-Test that property "%s" is type %s.', $propertyName, $propertyValueType) . PHP_EOL;
         if ($reflectedProp->hasType()) {
             $actualType = $reflectedProp->getType()->getName();
         } else {
@@ -195,12 +190,13 @@ class Utilities
             $actualType = 'mixed';
         }
         TestCase::assertSame($propertyValueType, $actualType,
-            'Class property "' . $propertyName . '" type isn\'t ' . $propertyValueType . '.');
+            sprintf('Class property "%s" type isn\'t %s.', $propertyName, $propertyValueType));
 
         if (is_null($positionInConstructor)) {
 
             //Test property default value
-            echo "-Test that property \"{$propertyName}\" default is {$propertyDefaultValue}." . PHP_EOL;
+            echo sprintf('-Test that property "%s" default is %s.',
+                    $propertyName, $propertyDefaultValue) . PHP_EOL;
             if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
 
                 // Simple way in PHP 8.0.0 or higher
@@ -230,17 +226,20 @@ class Utilities
                 }
             }
             TestCase::assertSame($propertyDefaultValue, $actualDefault,
-                'Class property "' . $propertyName . '" default isn\'t ' . $propertyDefaultValue . '.');
+                sprintf('Class property "%s" default isn\'t %s.', $propertyName, $propertyDefaultValue));
 
         } else {
-            echo "-Test that property \"{$propertyName}\" is in position #{$positionInConstructor} in constructor." . PHP_EOL;
+            echo sprintf('-Test that property "%s" is in position #%d in constructor.',
+                    $propertyName, $positionInConstructor) . PHP_EOL;
             // Test for inconsistencies
-            TestCase::assertTrue($propertyDefaultValue === 'unset', 'Class property "' .
-                $propertyName . '" shouldn\'t have a default value if it\'s initialized by the constructor.');
+            TestCase::assertTrue($propertyDefaultValue === 'unset',
+                sprintf('Class property "%s" shouldn\'t have %s',
+                    $propertyName, 'a default value if it\'s initialized by the constructor.'));
 
-            TestCase::assertGreaterThanOrEqual(1, $positionInConstructor, 'Class property "' .
-                $propertyName . '" parameter "positionInConstructor" is wrong, ' .
-                'position should be 1 or greater. Please review your test configuration.');
+            TestCase::assertGreaterThanOrEqual(1, $positionInConstructor,
+                sprintf('Class property "%s" parameter "positionInConstructor" is wrong, %s %s',
+                    $propertyName, 'position should be 1 or greater.',
+                    'Please review your test configuration.'));
 
             // Test property position in constructor
             $expectedValue = '2.2';
@@ -248,8 +247,8 @@ class Utilities
                 try {
                     settype($expectedValue, $propertyValueType);
                 } catch (Error $e) {
-                    TestCase::fail('We were not able to calculate expected value for class property "' .
-                        $propertyName . '" with type ' . $propertyValueType . '.');
+                    TestCase::fail(sprintf('We were not able to %s "%s" with type %s.',
+                        'calculate expected value for class property', $propertyName, $propertyValueType));
                 }
             }
 
@@ -273,9 +272,9 @@ class Utilities
             try {
                 $classConstructorParams[$positionInConstructor - 1] = $expectedValue;
             } catch (Error $e) {
-                TestCase::fail('Class property "' . $propertyName .
-                    '" parameter "positionInConstructor" is wrong, ' .
-                    'position should be from 1 to n parameters. Please review your test configuration.');
+                TestCase::fail(sprintf('Class property "%s" parameter "positionInConstructor" is wrong, %s %s',
+                    $propertyName, 'position should be from 1 to n parameters.',
+                    'Please review your test configuration.'));
             }
 
             try {
@@ -292,8 +291,8 @@ class Utilities
             }
 
             TestCase::assertSame($expectedValue, $actualValue,
-                'Class property "' . $propertyName . '" position in constructor isn\'t ' .
-                $positionInConstructor . '.');
+                sprintf('Class property "%s" position in constructor isn\'t %d.',
+                    $propertyName, $positionInConstructor));
         }
     }
 
