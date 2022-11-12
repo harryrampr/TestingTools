@@ -131,41 +131,41 @@ trait ClassUtilities
     /**
      * Test a structure property for the following attributes:
      *
-     * @param string $parentStructureFullName The property's parent structure name including namespace.
+     * @param string $parentFullName The property's parent structure name including namespace.
      * @param string $propertyName The name of the property to test.
-     * @param string $propertyAccessMode The kind of property's access mode, default is public.
-     * @param string $propertyValueType The property's value type, default is 'unset' for mixed.
-     * @param string $propertyDefaultValue The property's default value, default is 'unset' for no value.
+     * @param string $accessMode The kind of property's access mode, default is public.
+     * @param string $valueType The property's value type, default is 'unset' for mixed type.
+     * @param string $defaultValue The property's default value, default is 'unset' for no value.
      * @param int|null $positionInConstructor The property's position in __constructor, default is null for no position.
-     * @param bool $propertyIsStatic State if the property is static, default is false.
+     * @param bool $isStatic State if the property is static, default is false.
      *
      * @return void
      * @throws ReflectionException
      * @noinspection PhpMissingParamTypeInspection
      */
-    public function utility_test_class_property(string $parentStructureFullName,
+    public function utility_test_class_property(string $parentFullName,
                                                 string $propertyName,
-                                                string $propertyAccessMode = 'public',
-                                                string $propertyValueType = 'unset',
-                                                       $propertyDefaultValue = 'unset',
+                                                string $accessMode = 'public',
+                                                string $valueType = 'unset',
+                                                       $defaultValue = 'unset',
                                                 ?int   $positionInConstructor = null,
-                                                bool   $propertyIsStatic = false): void
+                                                bool   $isStatic = false): void
     {
 
         // Find if file exist and what kind of structure was found
-        $structureType = $this->exists_class_interface_or_trait($parentStructureFullName);
+        $structureType = $this->exists_class_interface_or_trait($parentFullName);
 
         // Test class, interface or trait exist
         echo PHP_EOL;
 
-        echo sprintf('-Testing that parent structure "%s" exist.', basename($parentStructureFullName)) . PHP_EOL;
+        echo sprintf('-Testing that parent structure "%s" exist.', basename($parentFullName)) . PHP_EOL;
         TestCase::assertTrue($structureType !== '',
-            sprintf("Parent structure \"%s\" wasn't found.", $parentStructureFullName));
+            sprintf("Parent structure \"%s\" wasn't found.", $parentFullName));
 
         // Get ready to use Reflection utilities
-        $reflectedClass = new ReflectionClass($parentStructureFullName);
+        $reflectedClass = new ReflectionClass($parentFullName);
         $reflectedProp = $reflectedClass->getProperty($propertyName);
-        if ($propertyAccessMode != 'public') {
+        if ($accessMode != 'public') {
             $reflectedProp->setAccessible(true);
         }
 
@@ -176,16 +176,16 @@ trait ClassUtilities
 
         // Test is property is static
         echo sprintf('-Testing that property "%s" %s static.',
-                $propertyName, ($propertyIsStatic ? "is" : "isn't")) . PHP_EOL;
-        TestCase::assertSame($propertyIsStatic, $reflectedProp->isStatic(),
+                $propertyName, ($isStatic ? "is" : "isn't")) . PHP_EOL;
+        TestCase::assertSame($isStatic, $reflectedProp->isStatic(),
             sprintf('Structure property "%s" %s static.', $propertyName,
-                (!$propertyIsStatic ? "is set as" : "isn't")));
+                (!$isStatic ? "is set as" : "isn't")));
 
         // Test property accessibility
-        echo sprintf('-Testing that property "%s" is %s.', $propertyName, $propertyAccessMode) . PHP_EOL;
+        echo sprintf('-Testing that property "%s" is %s.', $propertyName, $accessMode) . PHP_EOL;
         $customFailMessage = sprintf('Structure property "%s" accessibility isn\'t %s.',
-            $propertyName, $propertyAccessMode);
-        switch ($propertyAccessMode) {
+            $propertyName, $accessMode);
+        switch ($accessMode) {
             case 'public' :
                 TestCase::assertTrue($reflectedProp->isPublic(), $customFailMessage);
                 break;
@@ -200,31 +200,31 @@ trait ClassUtilities
         }
 
         // Test property type
-        echo sprintf('-Testing that property "%s" is type %s.', $propertyName, $propertyValueType) . PHP_EOL;
+        echo sprintf('-Testing that property "%s" is type %s.', $propertyName, $valueType) . PHP_EOL;
         if ($reflectedProp->hasType()) {
             $actualType = $reflectedProp->getType()->getName();
         } else {
             $actualType = 'unset';
         }
-        if ($actualType === 'unset' && $propertyValueType === 'mixed') {
+        if ($actualType === 'unset' && $valueType === 'mixed') {
             $actualType = 'mixed';
         }
-        TestCase::assertSame($propertyValueType, $actualType,
-            sprintf('Structure property "%s" type isn\'t %s.', $propertyName, $propertyValueType));
+        TestCase::assertSame($valueType, $actualType,
+            sprintf('Structure property "%s" type isn\'t %s.', $propertyName, $valueType));
 
         if (is_null($positionInConstructor)) {
 
             // Get the printable value of default value
-            if (is_scalar($propertyDefaultValue)) {
-                $defaultValuePrintable = $propertyDefaultValue;
+            if (is_scalar($defaultValue)) {
+                $defaultValuePrintable = $defaultValue;
             } else {
-                if (is_null($propertyDefaultValue)) {
+                if (is_null($defaultValue)) {
                     $defaultValuePrintable = "set to null";
-                } elseif (is_array($propertyDefaultValue)) {
+                } elseif (is_array($defaultValue)) {
                     $defaultValuePrintable = "an array";
-                } elseif (is_object($propertyDefaultValue)) {
+                } elseif (is_object($defaultValue)) {
                     $defaultValuePrintable = "an object";
-                } elseif (is_callable($propertyDefaultValue)) {
+                } elseif (is_callable($defaultValue)) {
                     $defaultValuePrintable = "a callable";
                 } else {
                     $defaultValuePrintable = "an item";
@@ -254,7 +254,7 @@ trait ClassUtilities
                     $newObject = $reflectedClass->newInstanceWithoutConstructor();
                     if ($reflectedProp->isInitialized($newObject)) {
                         $actualDefault = $reflectedProp->getValue($newObject);
-                        if (is_null($actualDefault) && $propertyDefaultValue === 'unset') {
+                        if (is_null($actualDefault) && $defaultValue === 'unset') {
                             $actualDefault = 'unset';
                         }
                     } else {
@@ -262,14 +262,14 @@ trait ClassUtilities
                     }
                 }
             }
-            TestCase::assertSame($propertyDefaultValue, $actualDefault,
+            TestCase::assertSame($defaultValue, $actualDefault,
                 sprintf('Structure property "%s" default isn\'t %s.', $propertyName, $defaultValuePrintable));
 
         } else {
             echo sprintf('-Testing that property "%s" is in position #%d in constructor.',
                     $propertyName, $positionInConstructor) . PHP_EOL;
             // Test for inconsistencies
-            TestCase::assertTrue($propertyDefaultValue === 'unset',
+            TestCase::assertTrue($defaultValue === 'unset',
                 sprintf('Structure property "%s" shouldn\'t have %s',
                     $propertyName, 'a default value if it\'s initialized by the constructor.'));
 
@@ -280,12 +280,12 @@ trait ClassUtilities
 
             // Test property position in constructor
             $expectedValue = '2.2';
-            if ($propertyValueType !== 'unset' && $propertyValueType !== 'mixed') {
+            if ($valueType !== 'unset' && $valueType !== 'mixed') {
                 try {
-                    settype($expectedValue, $propertyValueType);
+                    settype($expectedValue, $valueType);
                 } catch (Error $e) {
                     TestCase::fail(sprintf('We were not able to %s "%s" with type %s.',
-                        'calculate expected value for structure property', $propertyName, $propertyValueType));
+                        'calculate expected value for structure property', $propertyName, $valueType));
                 }
             }
 
@@ -309,9 +309,9 @@ trait ClassUtilities
 
                 TestCase::assertTrue($positionInConstructor > 0 &&
                     $positionInConstructor <= count($classConstructorParams),
-                    sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s %s',
-                        $propertyName, 'position should be from 1 to n parameters.',
-                        'Please review your test configuration.'));
+                    sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s. %s.',
+                        $propertyName, 'position should be from 1 to n parameters',
+                        'Use "null" to state that property is not in the constructor'));
 
                 $classConstructorParams[$positionInConstructor - 1] = $expectedValue;
 
@@ -334,7 +334,7 @@ trait ClassUtilities
 
             } else {
                 TestCase::markTestSkipped(sprintf('The structure "%s" isn\'t instantiable, we are not %s.',
-                    basename($parentStructureFullName), 'able to test the property\'s position in constructor'));
+                    basename($parentFullName), 'able to test the property\'s position in constructor'));
             }
         }
     }
