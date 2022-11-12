@@ -2,7 +2,7 @@
 
 namespace TestingTools\Samples;
 
-interface SampleInterface
+interface SampleInterface1
 {
     public function test1();
 

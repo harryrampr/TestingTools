@@ -18,22 +18,24 @@ trait ClassUtilities
      * Test a class, interface or trait.
      *
      * @param string $structureFullName The structure name including namespace.
-     * @param string $nameSpace The structure namespace.
-     * @param array $structuresExtendIt List of parent classes and traits that extend this structure.
-     * @param array $interfacesImplements List of interfaces that are implemented in this structure.
-     * @param bool $hasConstructor State if the structure has constructor, defaults to true.
-     * @param bool $isFinal State if the structure is final, defaults to false.
-     * @param bool $isInstantiable State if the structure is Instantiable, defaults to true.
-     * @param bool $isAbstract State if the structure is static, defaults to false.
-     * @param bool $isInterface State if the structure is an interface, defaults to false.
-     * @param bool $isTrait State if the structure is a trait, defaults to false.
+     * @param string $nameSpace The structure namespace, default is an empty string.
+     * @param string $parentClass Name of parent class extended by this structure, default is an empty string.
+     * @param array $implementedInterfaces List of interfaces implemented by this structure, default is an empty array.
+     * @param array $usedTraits List of traits used by this structure, default is an empty array.
+     * @param bool $hasConstructor State if the structure has constructor, default is true.
+     * @param bool $isFinal State if the structure is final, default is false.
+     * @param bool $isInstantiable State if the structure is Instantiable, default is true.
+     * @param bool $isAbstract State if the structure is static, default is false.
+     * @param bool $isInterface State if the structure is an interface, default is false.
+     * @param bool $isTrait State if the structure is a trait, default is false.
      * @return void
      * @throws ReflectionException
      */
     public function utility_test_class_structure(string $structureFullName,
                                                  string $nameSpace = '',
-                                                 array  $structuresExtendIt = [],
-                                                 array  $interfacesImplements = [],
+                                                 string $parentClass = '',
+                                                 array  $implementedInterfaces = [],
+                                                 array  $usedTraits = [],
                                                  bool   $hasConstructor = true,
                                                  bool   $isFinal = false,
                                                  bool   $isInstantiable = true,
@@ -108,6 +110,53 @@ trait ClassUtilities
                 ($isClass ? "is" : "isn't")) . PHP_EOL;
         TestCase::assertSame($isClass, $structureType === 'class',
             sprintf('Structure "%s" %s a class.', $structureShortName, (!$isClass ? "is" : "isn't")));
+
+        // Test structures extend it list.
+        $actualParentClass = $reflectedClass->getParentClass()->getShortName();
+        echo sprintf('-Testing that structure "%s" extends %s.', $structureShortName,
+                $parentClass) . PHP_EOL;
+        TestCase::assertSame($parentClass, $actualParentClass,
+            sprintf('Structure "%s" doesn\'t extend: %s.', $structureShortName,
+                $parentClass));
+
+        // Test list of implemented interfaces.
+        $actualImplementedInterfaces = $reflectedClass->getInterfaceNames();
+        $unaccountedInterfaces = $actualImplementedInterfaces;
+        foreach ($implementedInterfaces as $expectedImplemented) {
+
+            echo sprintf('-Testing that structure "%s" implements %s.', $structureShortName,
+                    $expectedImplemented) . PHP_EOL;
+
+            // Look for expected interface in actual implemented interfaces list
+            $interfaceFound = false;
+            foreach ($actualImplementedInterfaces as $actualImplemented) {
+
+                if ($actualImplemented === $expectedImplemented ||
+                    basename($actualImplemented) === $expectedImplemented) {
+
+                    // Interface was found
+                    $interfaceFound = true;
+                    // Remove item found from unaccounted interfaces
+                    $key = array_search($actualImplemented, $unaccountedInterfaces);
+                    if ($key) unset($unaccountedInterfaces[$key]);
+                    break;
+
+                }
+                // interface was not found
+            }
+
+            TestCase::assertTrue($interfaceFound,
+                sprintf('Not able to validate that structure "%s" implements: %s.%s%s %s%s',
+                    $structureShortName, $expectedImplemented, PHP_EOL,
+                    'These are the ones found:', json_encode($actualImplementedInterfaces), PHP_EOL));
+        }
+
+        // Test for unaccounted interfaces
+        echo sprintf('-Testing that structure "%s" implements no more than the already tested interfaces.',
+                $structureShortName) . PHP_EOL;
+        TestCase::assertSame(count($implementedInterfaces), count($actualImplementedInterfaces),
+            sprintf('The following interfaces are implemented but weren\'t specified by the test parameters:%s%s%s',
+                PHP_EOL, json_encode($unaccountedInterfaces), PHP_EOL));
 
     }
 
