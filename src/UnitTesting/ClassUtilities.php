@@ -30,16 +30,16 @@ trait ClassUtilities
      * @return void
      * @throws ReflectionException
      */
-    public function utility_test_class_interface_or_trait(string $structureFullName,
-                                                          string $nameSpace = '',
-                                                          array  $structuresExtendIt = [],
-                                                          array  $interfacesImplements = [],
-                                                          bool   $hasConstructor = true,
-                                                          bool   $isFinal = false,
-                                                          bool   $isInstantiable = true,
-                                                          bool   $isAbstract = false,
-                                                          bool   $isInterface = false,
-                                                          bool   $isTrait = false
+    public function utility_test_class_structure(string $structureFullName,
+                                                 string $nameSpace = '',
+                                                 array  $structuresExtendIt = [],
+                                                 array  $interfacesImplements = [],
+                                                 bool   $hasConstructor = true,
+                                                 bool   $isFinal = false,
+                                                 bool   $isInstantiable = true,
+                                                 bool   $isAbstract = false,
+                                                 bool   $isInterface = false,
+                                                 bool   $isTrait = false
 
     ): void
     {

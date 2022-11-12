@@ -18,7 +18,7 @@ class SampleClassTest extends TestCase
      */
     public function testClassSampleClass()
     {
-        $this->utility_test_class_interface_or_trait(
+        $this->utility_test_class_structure(
             $this->className,
             'TestingTools\\Samples',
             [],
