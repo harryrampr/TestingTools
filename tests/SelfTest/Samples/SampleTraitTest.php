@@ -16,7 +16,7 @@ class SampleTraitTest extends TestCase
      */
     public function testSampleTrait()
     {
-        $this->utilityToTestClassTraitOrInterface(
+        $this->utility_test_class_interface_or_trait(
             'TestingTools\\Samples\\SampleTrait',
             'TestingTools\\Samples',
             [],

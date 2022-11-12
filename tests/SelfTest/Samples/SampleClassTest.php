@@ -18,7 +18,7 @@ class SampleClassTest extends TestCase
      */
     public function testClassSampleClass()
     {
-        $this->utilityToTestClassTraitOrInterface(
+        $this->utility_test_class_interface_or_trait(
             $this->className,
             'TestingTools\\Samples',
             [],
@@ -36,7 +36,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib1()
     {
-        $this->utilityToTestClassProperty($this->className,
+        $this->utility_test_class_property($this->className,
             'attrib1',
             'public',
             'int',
@@ -50,7 +50,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib2()
     {
-        $this->utilityToTestClassProperty($this->className, 'attrib2', 'public', 'string',
+        $this->utility_test_class_property($this->className, 'attrib2', 'public', 'string',
             '2');
     }
 
@@ -59,7 +59,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib3()
     {
-        $this->utilityToTestClassProperty($this->className, 'attrib3', 'public', 'float',
+        $this->utility_test_class_property($this->className, 'attrib3', 'public', 'float',
             3.1, null, false);
     }
 
@@ -68,7 +68,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib4()
     {
-        $this->utilityToTestClassProperty(
+        $this->utility_test_class_property(
             $this->className,
             'attrib4',
             'public',
@@ -81,7 +81,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib5()
     {
-        $this->utilityToTestClassProperty($this->className, 'attrib5', 'protected', 'bool',
+        $this->utility_test_class_property($this->className, 'attrib5', 'protected', 'bool',
             'unset', 1);
     }
 
@@ -90,7 +90,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib6()
     {
-        $this->utilityToTestClassProperty($this->className, 'attrib6', 'private', 'string',
+        $this->utility_test_class_property($this->className, 'attrib6', 'private', 'string',
             'unset', 2);
     }
 
@@ -99,7 +99,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib7()
     {
-        $this->utilityToTestClassProperty($this->className, 'attrib7', 'private', 'array',
+        $this->utility_test_class_property($this->className, 'attrib7', 'private', 'array',
             'unset', 3);
     }
 
@@ -108,7 +108,7 @@ class SampleClassTest extends TestCase
      */
     public function testSampleClassPropertyAttrib8()
     {
-        $this->utilityToTestClassProperty($this->className, 'attrib8', 'private', 'object',
+        $this->utility_test_class_property($this->className, 'attrib8', 'private', 'object',
             'unset', 4);
     }
 

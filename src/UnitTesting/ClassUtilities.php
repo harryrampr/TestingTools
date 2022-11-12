@@ -30,23 +30,23 @@ trait ClassUtilities
      * @return void
      * @throws ReflectionException
      */
-    public function utilityToTestClassTraitOrInterface(string $structureFullName,
-                                                       string $nameSpace = '',
-                                                       array  $structuresExtendIt = [],
-                                                       array  $interfacesImplements = [],
-                                                       bool   $hasConstructor = true,
-                                                       bool   $isFinal = false,
-                                                       bool   $isInstantiable = true,
-                                                       bool   $isAbstract = false,
-                                                       bool   $isInterface = false,
-                                                       bool   $isTrait = false
+    public function utility_test_class_interface_or_trait(string $structureFullName,
+                                                          string $nameSpace = '',
+                                                          array  $structuresExtendIt = [],
+                                                          array  $interfacesImplements = [],
+                                                          bool   $hasConstructor = true,
+                                                          bool   $isFinal = false,
+                                                          bool   $isInstantiable = true,
+                                                          bool   $isAbstract = false,
+                                                          bool   $isInterface = false,
+                                                          bool   $isTrait = false
 
     ): void
     {
         $structureShortName = basename($structureFullName);
 
         // Find if file exist and what kind of structure was found
-        $structureType = $this->utilityExistsClassTraitOrInterface($structureFullName);
+        $structureType = $this->exists_class_interface_or_trait($structureFullName);
 
         // Test class, interface or trait exist
         echo PHP_EOL;
@@ -117,7 +117,7 @@ trait ClassUtilities
      * @param string $fullName The name including namespace.
      * @return string The type of structure found, an empty string if nothing found.
      */
-    private function utilityExistsClassTraitOrInterface(string $fullName): string
+    private function exists_class_interface_or_trait(string $fullName): string
     {
 
         if (class_exists($fullName)) return 'class';
@@ -143,17 +143,17 @@ trait ClassUtilities
      * @throws ReflectionException
      * @noinspection PhpMissingParamTypeInspection
      */
-    public function utilityToTestClassProperty(string $parentStructureFullName,
-                                               string $propertyName,
-                                               string $propertyAccessMode = 'public',
-                                               string $propertyValueType = 'unset',
-                                                      $propertyDefaultValue = 'unset',
-                                               ?int   $positionInConstructor = null,
-                                               bool   $propertyIsStatic = false): void
+    public function utility_test_class_property(string $parentStructureFullName,
+                                                string $propertyName,
+                                                string $propertyAccessMode = 'public',
+                                                string $propertyValueType = 'unset',
+                                                       $propertyDefaultValue = 'unset',
+                                                ?int   $positionInConstructor = null,
+                                                bool   $propertyIsStatic = false): void
     {
 
         // Find if file exist and what kind of structure was found
-        $structureType = $this->utilityExistsClassTraitOrInterface($parentStructureFullName);
+        $structureType = $this->exists_class_interface_or_trait($parentStructureFullName);
 
         // Test class, interface or trait exist
         echo PHP_EOL;
