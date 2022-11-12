@@ -21,6 +21,7 @@ class SampleChildClass1Test extends TestCase
         $this->utility_test_class_structure($this->className,
             dirname($this->className),
             'SampleClass',
-            ['TestingTools\Samples\SampleInterface2']);
+            ["TestingTools\\Samples\\SampleInterface1"],
+            ['SampleTrait']);
     }
 }

@@ -113,7 +113,7 @@ trait ClassUtilities
 
         // Test structures extend it list.
         $actualParentClass = $reflectedClass->getParentClass()->getShortName();
-        echo sprintf('-Testing that structure "%s" extends %s.', $structureShortName,
+        echo sprintf('-Testing that structure "%s" extends: %s.', $structureShortName,
                 $parentClass) . PHP_EOL;
         TestCase::assertSame($parentClass, $actualParentClass,
             sprintf('Structure "%s" doesn\'t extend: %s.', $structureShortName,
@@ -124,7 +124,7 @@ trait ClassUtilities
         $unaccountedInterfaces = $actualImplementedInterfaces;
         foreach ($implementedInterfaces as $expectedImplemented) {
 
-            echo sprintf('-Testing that structure "%s" implements %s.', $structureShortName,
+            echo sprintf('-Testing that structure "%s" implements: %s.', $structureShortName,
                     $expectedImplemented) . PHP_EOL;
 
             // Look for expected interface in actual implemented interfaces list
@@ -155,8 +155,48 @@ trait ClassUtilities
         echo sprintf('-Testing that structure "%s" implements no more than the already tested interfaces.',
                 $structureShortName) . PHP_EOL;
         TestCase::assertSame(count($implementedInterfaces), count($actualImplementedInterfaces),
-            sprintf('The following interfaces are implemented but weren\'t specified by the test parameters:%s%s%s',
+            sprintf('The following interfaces were implemented, but not specified by the test parameters:%s%s%s',
                 PHP_EOL, json_encode($unaccountedInterfaces), PHP_EOL));
+
+
+        // Test list of used traits.
+        $actualUsedTraits = $reflectedClass->getTraitNames();
+        $unaccountedTraits = $actualUsedTraits;
+        foreach ($usedTraits as $expectedUsed) {
+
+            echo sprintf('-Testing that structure "%s" uses: %s.', $structureShortName,
+                    $expectedUsed) . PHP_EOL;
+
+            // Look for expected trait in actual used traits list
+            $traitFound = false;
+            foreach ($actualUsedTraits as $actualUsed) {
+
+                if ($actualUsed === $expectedUsed ||
+                    basename($actualUsed) === $expectedUsed) {
+
+                    // Trait was found
+                    $traitFound = true;
+                    // Remove item found from unaccounted traits
+                    $key = array_search($actualUsed, $unaccountedTraits);
+                    if ($key) unset($unaccountedTraits[$key]);
+                    break;
+
+                }
+                // trait was not found
+            }
+
+            TestCase::assertTrue($traitFound,
+                sprintf('Not able to validate that structure "%s" uses: %s.%s%s %s%s',
+                    $structureShortName, $expectedUsed, PHP_EOL,
+                    'These are the ones found:', json_encode($actualUsedTraits), PHP_EOL));
+        }
+
+        // Test for unaccounted traits
+        echo sprintf('-Testing that structure "%s" uses no more than the already tested traits.',
+                $structureShortName) . PHP_EOL;
+        TestCase::assertSame(count($usedTraits), count($actualUsedTraits),
+            sprintf('The following traits were used, but not specified by the test parameters:%s%s%s',
+                PHP_EOL, json_encode($unaccountedTraits), PHP_EOL));
 
     }
 
