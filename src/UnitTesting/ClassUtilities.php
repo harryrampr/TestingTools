@@ -307,13 +307,13 @@ trait ClassUtilities
                     $classConstructorParams[] = $paramValue;
                 }
 
-                try {
-                    $classConstructorParams[$positionInConstructor - 1] = $expectedValue;
-                } catch (Error $e) {
-                    TestCase::fail(sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s %s',
+                TestCase::assertTrue($positionInConstructor > 0 &&
+                    $positionInConstructor <= count($classConstructorParams),
+                    sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s %s',
                         $propertyName, 'position should be from 1 to n parameters.',
                         'Please review your test configuration.'));
-                }
+
+                $classConstructorParams[$positionInConstructor - 1] = $expectedValue;
 
                 try {
                     $newObject = $reflectedClass->newInstanceArgs($classConstructorParams);
