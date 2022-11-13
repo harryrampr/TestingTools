@@ -15,7 +15,11 @@ trait ClassUtilities
 {
 
     /**
-     * Test a class, interface or trait.
+     * Test a class, interface or trait using PHPUnit.
+     *
+     * This test performs over 12 asserts by just adding one line to your code.
+     * It generates output that let you know the assertions fulfilled and the
+     * problems found.
      *
      * @param string $structureFullName The structure name including namespace.
      * @param string $nameSpace The structure namespace, default is an empty string.
@@ -52,80 +56,91 @@ trait ClassUtilities
 
         // Test class, interface or trait exist
         echo PHP_EOL;
-        echo sprintf('-Testing that structure "%s" exist.', $structureShortName) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" exist.%s', $structureShortName, PHP_EOL);
         TestCase::assertTrue($structureType !== '',
-            sprintf("No class, interface or trait named \"%s\" wasn't found.", $structureFullName));
+            sprintf("No class, interface or trait named \"%s\" wasn't found.%s",
+                $structureFullName, PHP_EOL));
 
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($structureFullName);
 
         // Test structure namespace
-        echo sprintf('-Testing that structure "%s" has namespace: %s.', $structureShortName, $nameSpace) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" has namespace: %s.%s', $structureShortName,
+            $nameSpace, PHP_EOL);
         TestCase::assertSame($nameSpace, $reflectedClass->getNamespaceName(),
-            sprintf('Structure "%s" namespace isn\'t %s.', $structureShortName, $nameSpace));
+            sprintf('Structure "%s" namespace isn\'t %s.%s', $structureShortName,
+                $nameSpace, PHP_EOL));
 
 
         // Todo: Add more tests here.
 
         // Test if structure has a constructor
-        echo sprintf('-Testing that structure "%s" %s a constructor.', $structureShortName,
-                ($hasConstructor ? "has" : "hasn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s a constructor.%s', $structureShortName,
+            ($hasConstructor ? "has" : "hasn't"), PHP_EOL);
         TestCase::assertSame($hasConstructor, !is_null($reflectedClass->getConstructor()),
-            sprintf('Structure "%s" %s a constructor.', $structureShortName,
-                (!$hasConstructor ? "has" : "hasn't")));
+            sprintf('Structure "%s" %s a constructor.%s', $structureShortName,
+                (!$hasConstructor ? "has" : "hasn't"), PHP_EOL));
 
         // Test if structure is final.
-        echo sprintf('-Testing that structure "%s" %s final.', $structureShortName,
-                ($isFinal ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s final.%s', $structureShortName,
+            ($isFinal ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isFinal, $reflectedClass->isFinal(),
-            sprintf('Structure "%s" %s final.', $structureShortName, (!$isFinal ? "is" : "isn't")));
+            sprintf('Structure "%s" %s final.%s', $structureShortName,
+                (!$isFinal ? "is" : "isn't"), PHP_EOL));
 
         // Test if Structure is instantiable.
-        echo sprintf('-Testing that structure "%s" %s instantiable.', $structureShortName,
-                ($isInstantiable ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s instantiable.%s', $structureShortName,
+            ($isInstantiable ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isInstantiable, $reflectedClass->isInstantiable(),
-            sprintf('Structure "%s" %s instantiable.', $structureShortName, (!$isInstantiable ? "is" : "isn't")));
+            sprintf('Structure "%s" %s instantiable.%s', $structureShortName,
+                (!$isInstantiable ? "is" : "isn't"), PHP_EOL));
 
         // Test if Structure is abstract.
-        echo sprintf('-Testing that structure "%s" %s abstract.', $structureShortName,
-                ($isAbstract ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s abstract.%s', $structureShortName,
+            ($isAbstract ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isAbstract, $reflectedClass->isAbstract(),
-            sprintf('Structure "%s" %s abstract.', $structureShortName, (!$isAbstract ? "is" : "isn't")));
+            sprintf('Structure "%s" %s abstract.%s', $structureShortName,
+                (!$isAbstract ? "is" : "isn't"), PHP_EOL));
 
         // Test if is interface.
-        echo sprintf('-Testing that structure "%s" %s an interface.', $structureShortName,
-                ($isInterface ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s an interface.%s', $structureShortName,
+            ($isInterface ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isInterface, $reflectedClass->isInterface(),
-            sprintf('Structure "%s" %s an interface.', $structureShortName, (!$isInterface ? "is" : "isn't")));
+            sprintf('Structure "%s" %s an interface.%s', $structureShortName,
+                (!$isInterface ? "is" : "isn't"), PHP_EOL));
 
         // Test if is trait.
-        echo sprintf('-Testing that structure "%s" %s a trait.', $structureShortName,
-                ($isTrait ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s a trait.%s', $structureShortName,
+            ($isTrait ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isTrait, $reflectedClass->isTrait(),
-            sprintf('Structure "%s" %s a trait.', $structureShortName, (!$isTrait ? "is" : "isn't")));
+            sprintf('Structure "%s" %s a trait.%s', $structureShortName,
+                (!$isTrait ? "is" : "isn't"), PHP_EOL));
 
         // Test if is class.
         $isClass = !$isInterface && !$isTrait;
-        echo sprintf('-Testing that structure "%s" %s a class.', $structureShortName,
-                ($isClass ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" %s a class.%s', $structureShortName,
+            ($isClass ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isClass, $structureType === 'class',
-            sprintf('Structure "%s" %s a class.', $structureShortName, (!$isClass ? "is" : "isn't")));
+            sprintf('Structure "%s" %s a class.%s', $structureShortName,
+                (!$isClass ? "is" : "isn't"), PHP_EOL));
 
         // Test structures extend it list.
-        $actualParentClass = $reflectedClass->getParentClass()->getShortName();
-        echo sprintf('-Testing that structure "%s" extends: %s.', $structureShortName,
-                $parentClass) . PHP_EOL;
-        TestCase::assertSame($parentClass, $actualParentClass,
-            sprintf('Structure "%s" doesn\'t extend: %s.', $structureShortName,
-                $parentClass));
+        $actualParentClass = $reflectedClass->getParentClass();
+        $actualParentClassName = $actualParentClass ? $actualParentClass->getShortName() : 'no parent class';
+        $parentClass = $parentClass == '' ? 'no parent class' : $parentClass;
+        echo sprintf('-Testing that structure "%s" extends: %s.%s', $structureShortName,
+            $parentClass, PHP_EOL);
+        TestCase::assertSame($parentClass, $actualParentClassName,
+            sprintf('Structure "%s" doesn\'t extend: %s.%s', $structureShortName,
+                $parentClass, PHP_EOL));
 
         // Test list of implemented interfaces.
         $actualImplementedInterfaces = $reflectedClass->getInterfaceNames();
         $unaccountedInterfaces = $actualImplementedInterfaces;
         foreach ($implementedInterfaces as $expectedImplemented) {
 
-            echo sprintf('-Testing that structure "%s" implements: %s.', $structureShortName,
-                    $expectedImplemented) . PHP_EOL;
+            echo sprintf('-Testing that structure "%s" implements: %s.%s', $structureShortName,
+                $expectedImplemented, PHP_EOL);
 
             // Look for expected interface in actual implemented interfaces list
             $interfaceFound = false;
@@ -152,8 +167,8 @@ trait ClassUtilities
         }
 
         // Test for unaccounted interfaces
-        echo sprintf('-Testing that structure "%s" implements no more than the already tested interfaces.',
-                $structureShortName) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" only implements the %d specified interfaces.%s',
+            $structureShortName, count($implementedInterfaces), PHP_EOL);
         TestCase::assertSame(count($implementedInterfaces), count($actualImplementedInterfaces),
             sprintf('The following interfaces were implemented, but not specified by the test parameters:%s%s%s',
                 PHP_EOL, json_encode($unaccountedInterfaces), PHP_EOL));
@@ -164,8 +179,8 @@ trait ClassUtilities
         $unaccountedTraits = $actualUsedTraits;
         foreach ($usedTraits as $expectedUsed) {
 
-            echo sprintf('-Testing that structure "%s" uses: %s.', $structureShortName,
-                    $expectedUsed) . PHP_EOL;
+            echo sprintf('-Testing that structure "%s" uses: %s.%s', $structureShortName,
+                $expectedUsed, PHP_EOL);
 
             // Look for expected trait in actual used traits list
             $traitFound = false;
@@ -192,8 +207,8 @@ trait ClassUtilities
         }
 
         // Test for unaccounted traits
-        echo sprintf('-Testing that structure "%s" uses no more than the already tested traits.',
-                $structureShortName) . PHP_EOL;
+        echo sprintf('-Testing that structure "%s" only uses the %d specified traits.%s',
+            $structureShortName, count($usedTraits), PHP_EOL);
         TestCase::assertSame(count($usedTraits), count($actualUsedTraits),
             sprintf('The following traits were used, but not specified by the test parameters:%s%s%s',
                 PHP_EOL, json_encode($unaccountedTraits), PHP_EOL));
@@ -247,9 +262,9 @@ trait ClassUtilities
         // Test class, interface or trait exist
         echo PHP_EOL;
 
-        echo sprintf('-Testing that parent structure "%s" exist.', basename($parentFullName)) . PHP_EOL;
+        echo sprintf('-Testing that parent structure "%s" exist.%s', basename($parentFullName), PHP_EOL);
         TestCase::assertTrue($structureType !== '',
-            sprintf("Parent structure \"%s\" wasn't found.", $parentFullName));
+            sprintf("Parent structure \"%s\" wasn't found.%s", $parentFullName, PHP_EOL));
 
         // Get ready to use Reflection utilities
         $reflectedClass = new ReflectionClass($parentFullName);
@@ -259,21 +274,21 @@ trait ClassUtilities
         }
 
         // Test property exists in structure
-        echo sprintf('-Testing that property "%s" exist.', $propertyName) . PHP_EOL;
+        echo sprintf('-Testing that property "%s" exist.%s', $propertyName, PHP_EOL);
         TestCase::assertTrue($reflectedClass->hasProperty($propertyName),
-            sprintf('Property "%s" isn\'t available in structure.', $propertyName));
+            sprintf('Property "%s" isn\'t available in structure.%s', $propertyName, PHP_EOL));
 
         // Test is property is static
-        echo sprintf('-Testing that property "%s" %s static.',
-                $propertyName, ($isStatic ? "is" : "isn't")) . PHP_EOL;
+        echo sprintf('-Testing that property "%s" %s static.%s',
+            $propertyName, ($isStatic ? "is" : "isn't"), PHP_EOL);
         TestCase::assertSame($isStatic, $reflectedProp->isStatic(),
-            sprintf('Structure property "%s" %s static.', $propertyName,
-                (!$isStatic ? "is set as" : "isn't")));
+            sprintf('Structure property "%s" %s static.%s', $propertyName,
+                (!$isStatic ? "is set as" : "isn't"), PHP_EOL));
 
         // Test property accessibility
-        echo sprintf('-Testing that property "%s" is %s.', $propertyName, $accessMode) . PHP_EOL;
-        $customFailMessage = sprintf('Structure property "%s" accessibility isn\'t %s.',
-            $propertyName, $accessMode);
+        echo sprintf('-Testing that property "%s" is %s.%s', $propertyName, $accessMode, PHP_EOL);
+        $customFailMessage = sprintf('Structure property "%s" accessibility isn\'t %s.%s',
+            $propertyName, $accessMode, PHP_EOL);
         switch ($accessMode) {
             case 'public' :
                 TestCase::assertTrue($reflectedProp->isPublic(), $customFailMessage);
@@ -289,7 +304,8 @@ trait ClassUtilities
         }
 
         // Test property type
-        echo sprintf('-Testing that property "%s" is type %s.', $propertyName, $valueType) . PHP_EOL;
+        echo sprintf('-Testing that property "%s" is type %s.%s',
+            $propertyName, $valueType, PHP_EOL);
         if ($reflectedProp->hasType()) {
             $actualType = $reflectedProp->getType()->getName();
         } else {
@@ -299,7 +315,8 @@ trait ClassUtilities
             $actualType = 'mixed';
         }
         TestCase::assertSame($valueType, $actualType,
-            sprintf('Structure property "%s" type isn\'t %s.', $propertyName, $valueType));
+            sprintf('Structure property "%s" type isn\'t %s.%s', $propertyName,
+                $valueType, PHP_EOL));
 
         if (is_null($positionInConstructor)) {
 
@@ -321,8 +338,8 @@ trait ClassUtilities
             }
 
             //Test property default value
-            echo sprintf('-Testing that property "%s" default is %s.', $propertyName,
-                    $defaultValuePrintable) . PHP_EOL;
+            echo sprintf('-Testing that property "%s" default is %s.%s', $propertyName,
+                $defaultValuePrintable, PHP_EOL);
             if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
 
                 // Simple way in PHP 8.0.0 or higher
@@ -352,20 +369,21 @@ trait ClassUtilities
                 }
             }
             TestCase::assertSame($defaultValue, $actualDefault,
-                sprintf('Structure property "%s" default isn\'t %s.', $propertyName, $defaultValuePrintable));
+                sprintf('Structure property "%s" default isn\'t %s.%s',
+                    $propertyName, $defaultValuePrintable, PHP_EOL));
 
         } else {
-            echo sprintf('-Testing that property "%s" is in position #%d in constructor.',
-                    $propertyName, $positionInConstructor) . PHP_EOL;
+            echo sprintf('-Testing that property "%s" is in position #%d in constructor.%s',
+                $propertyName, $positionInConstructor, PHP_EOL);
             // Test for inconsistencies
             TestCase::assertTrue($defaultValue === 'unset',
-                sprintf('Structure property "%s" shouldn\'t have %s',
-                    $propertyName, 'a default value if it\'s initialized by the constructor.'));
+                sprintf('Structure property "%s" shouldn\'t have %s.%s',
+                    $propertyName, 'a default value if it\'s initialized by the constructor', PHP_EOL));
 
             TestCase::assertGreaterThanOrEqual(1, $positionInConstructor,
-                sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s %s',
-                    $propertyName, 'position should be 1 or greater.',
-                    'Please review your test configuration.'));
+                sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s. %s.%s',
+                    $propertyName, 'position should be 1 or greater',
+                    'Please review your test configuration', PHP_EOL));
 
             // Test property position in constructor
             $expectedValue = '2.2';
@@ -381,7 +399,8 @@ trait ClassUtilities
             // Test if constructor exist
             $structureConstructor = $reflectedClass->getConstructor();
             TestCase::assertFalse(is_null($structureConstructor),
-                sprintf('There is no constructor for structure property "%s".', $propertyName));
+                sprintf('There is no constructor for structure property "%s".%s',
+                    $propertyName, PHP_EOL));
 
             if ($reflectedClass->isInstantiable()) {
                 // Generate array of constructors params
@@ -398,9 +417,9 @@ trait ClassUtilities
 
                 TestCase::assertTrue($positionInConstructor > 0 &&
                     $positionInConstructor <= count($classConstructorParams),
-                    sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s. %s.',
+                    sprintf('Structure property "%s" parameter "positionInConstructor" is wrong, %s. %s.%s',
                         $propertyName, 'position should be from 1 to n parameters',
-                        'Use "null" to state that property is not in the constructor'));
+                        'Use "null" to state that property is not in the constructor', PHP_EOL));
 
                 $classConstructorParams[$positionInConstructor - 1] = $expectedValue;
 
@@ -418,12 +437,12 @@ trait ClassUtilities
                 }
 
                 TestCase::assertSame($expectedValue, $actualValue,
-                    sprintf('Structure property "%s" position in constructor isn\'t %d.',
-                        $propertyName, $positionInConstructor));
+                    sprintf('Structure property "%s" position in constructor isn\'t %d.%s',
+                        $propertyName, $positionInConstructor, PHP_EOL));
 
             } else {
-                TestCase::markTestSkipped(sprintf('The structure "%s" isn\'t instantiable, we are not %s.',
-                    basename($parentFullName), 'able to test the property\'s position in constructor'));
+                TestCase::markTestSkipped(sprintf('The structure "%s" isn\'t instantiable, we are not %s.%s',
+                    basename($parentFullName), 'able to test the property\'s position in constructor', PHP_EOL));
             }
         }
     }

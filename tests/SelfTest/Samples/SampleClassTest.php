@@ -21,6 +21,7 @@ class SampleClassTest extends TestCase
         $this->utility_test_class_structure(
             $this->className,
             'TestingTools\\Samples',
+            '',
             [],
             [],
             true,
